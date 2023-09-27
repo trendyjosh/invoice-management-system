@@ -23,9 +23,11 @@ class InvoiceController extends Controller
     /**
      * Show the form for creating a new invoice.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('Invoice/Create', [
+            'invoices' => auth()->user()->invoices,
+        ]);
     }
 
     /**
