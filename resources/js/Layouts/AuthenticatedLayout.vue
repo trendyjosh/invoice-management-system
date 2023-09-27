@@ -121,6 +121,12 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('invoices.index')" :active="route().current('invoices.index')">
+                            Invoices
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('customers.index')" :active="route().current('customers.index')">
+                            Customers
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
