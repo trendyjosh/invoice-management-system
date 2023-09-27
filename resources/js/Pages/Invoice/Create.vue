@@ -1,17 +1,22 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
+
+defineProps<{
+    mustVerifyEmail?: boolean;
+    status?: string;
+}>();
 </script>
 
 <template>
-    <Head title="Customers" />
+    <Head title="Invoices" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
             >
-                Customers
+                Create Invoice
             </h2>
         </template>
 
