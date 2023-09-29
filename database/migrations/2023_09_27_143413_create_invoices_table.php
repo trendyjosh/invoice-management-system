@@ -13,8 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // invoice_number
             $table->foreignIdFor(User::class);
+            $table->date('date');
+            $table->date('due_date');
             $table->timestamps();
         });
     }

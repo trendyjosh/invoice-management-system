@@ -11,6 +11,15 @@ class InvoiceItem extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'description',
+        'quantity',
+        'unit_price',
+    ];
+
+    /**
      * Get the invoice that owns the invoice item.
      */
     public function user(): BelongsTo

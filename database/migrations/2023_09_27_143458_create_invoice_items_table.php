@@ -15,6 +15,9 @@ return new class extends Migration
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Invoice::class);
+            $table->text('description');
+            $table->integer('quantity');
+            $table->decimal('unit_price');
             $table->timestamps();
         });
     }

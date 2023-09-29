@@ -17,24 +17,16 @@ class Customer extends Model
     protected $fillable = [
         'customer_number',
         'name',
-        'type',
         'organisation_number',
         'vat_number',
-        'street',
-        'street_2',
-        'postal_code',
+        'address_1',
+        'address_2',
+        'postcode',
         'city',
-        'contact',
+        'country',
         'email',
         'phone',
-        'language',
         'payment_terms',
-        'delivery_terms',
-        'delay_interest',
-        'country',
-        'country_iso2',
-        'country_subdivision_code',
-        'send_to_emails',
     ];
 
     /**
