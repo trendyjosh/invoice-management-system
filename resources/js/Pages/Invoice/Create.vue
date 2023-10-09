@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
+import InvoiceForm from "./Partials/InvoiceForm.vue";
 
-defineProps<{
-    mustVerifyEmail?: boolean;
-    status?: string;
-}>();
+defineProps({
+    customers: Object,
+    selected: Object,
+});
 </script>
 
 <template>
@@ -22,7 +23,7 @@ defineProps<{
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <!-- TODO -->
+                <InvoiceForm :customers="customers" :selected="selected" />
             </div>
         </div>
     </AuthenticatedLayout>

@@ -1,0 +1,168 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import Datepicker from "@/Components/Datepicker.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import CustomersSelect from "@/Components/CustomersSelect.vue";
+import InvoiceItemComponent from "@/Components/InvoiceItemComponent.vue";
+import { useForm, Link } from "@inertiajs/vue3";
+
+const props = defineProps({
+    customers: Object,
+    selected: Object,
+});
+
+const customer = ref<number>(props.selected?.id);
+const date = ref<Date>();
+const due_date = ref<Date>();
+const invoiceItems = ref<Array<InvoiceItem>>(Array<InvoiceItem>());
+
+const form = useForm({
+    customer: null,
+    date: null,
+    due_date: null,
+    invoiceItems: null,
+});
+
+function addItem() {
+    const invoiceItem = ref<InvoiceItem>({
+        description: "",
+        quantity: 1,
+        unit_price: 0,
+    });
+    invoiceItems.value.push(invoiceItem.value);
+}
+
+function deleteItem(key: number) {
+    invoiceItems.value.splice(key, 1);
+    console.log("Removed: " + key);
+}
+
+function submit() {
+    form.transform((data) => ({
+        ...data,
+        customer: customer.value,
+        date: date.value?.toLocaleDateString("en-GB"),
+        due_date: due_date.value?.toLocaleDateString("en-GB"),
+        invoiceItems: invoiceItems.value,
+    })).post(route("invoices.store"));
+}
+</script>
+
+<template>
+    <form @submit.prevent="submit">
+        <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+            <section class="space-y-6">
+                <header>
+                    <h2
+                        class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                    >
+                        Details
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        Select your customer and invoice dates.
+                    </p>
+                </header>
+                <div class="mt-6">
+                    <InputLabel value="Customer" />
+
+                    <CustomersSelect
+                        :customers="customers"
+                        v-model="customer"
+                    />
+
+                    <InputError class="mt-2" :message="form.errors.customer" />
+                </div>
+
+                <div>
+                    <InputLabel value="Date" />
+
+                    <Datepicker v-model="date" />
+
+                    <InputError class="mt-2" :message="form.errors.date" />
+                </div>
+
+                <div>
+                    <InputLabel value="Due date" />
+
+                    <Datepicker v-model="due_date" />
+
+                    <InputError class="mt-2" :message="form.errors.due_date" />
+                </div>
+
+                <header>
+                    <h2
+                        class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                    >
+                        Invoice Items
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        The invoice total is calculated from the sum of all
+                        invoice items.
+                    </p>
+                </header>
+
+                <div class="space-y-6">
+                    <InvoiceItemComponent
+                        v-for="(invoiceItem, index) in invoiceItems"
+                        :id="index"
+                        :form="form"
+                        v-model="invoiceItems[index]"
+                        @delete-item="deleteItem"
+                    />
+                    <button
+                        class="btn btn-outline btn-primary"
+                        type="button"
+                        @click="addItem"
+                    >
+                        Add item
+                    </button>
+                </div>
+
+                <header>
+                    <h2
+                        class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                    >
+                        Summary
+                    </h2>
+
+                    <InputLabel
+                        >Amount:
+                        {{
+                            "£" +
+                            invoiceItems.reduce(
+                                (accumulator, currentValue) =>
+                                    accumulator +
+                                    currentValue.quantity *
+                                        currentValue.unit_price,
+                                0
+                            )
+                        }}
+                    </InputLabel>
+                </header>
+                <div class="flex items-center gap-4">
+                    <PrimaryButton :disabled="form.processing"
+                        >Create</PrimaryButton
+                    >
+
+                    <Transition
+                        enter-active-class="transition ease-in-out"
+                        enter-from-class="opacity-0"
+                        leave-active-class="transition ease-in-out"
+                        leave-to-class="opacity-0"
+                    >
+                        <p
+                            v-if="form.recentlySuccessful"
+                            class="text-sm text-gray-600 dark:text-gray-400"
+                        >
+                            Created.
+                        </p>
+                    </Transition>
+                </div>
+            </section>
+        </div>
+    </form>
+</template>

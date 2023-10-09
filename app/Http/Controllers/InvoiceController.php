@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,19 +30,49 @@ class InvoiceController extends Controller
     /**
      * Show the form for creating a new invoice.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
+        // Get logged in user and eager load their customers
+        $user = User::with('customers')->find(auth()->user()->id);
         return Inertia::render('Invoice/Create', [
-            'invoices' => auth()->user()->invoices,
+            'customers' => $user->customers,
+            'selected' => $user->customers()->find($request->customer) // optionally selected customer
         ]);
     }
 
     /**
      * Store a newly created invoice in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        // Validate input
+        $formFields = Validator::make($request->all(), [
+            'customer' => ['required'],
+            'date' => ['required', 'string'],
+            'due_date' => ['required', 'string'],
+            'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
+            'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
+            'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',
+        ], [
+            'invoiceItems.*.*.required_with' => 'All fields are required for Item #:position.',
+        ])->validate();
+
+        // Include current user
+        $formFields['user_id'] = auth()->user()->id;
+
+        // Format js dates for SQL
+        $date = Carbon::createFromFormat('d/m/Y', $formFields['date']);
+        $due_date = Carbon::createFromFormat('d/m/Y', $formFields['due_date']);
+        $formFields['date'] = $date->toDateString();
+        $formFields['due_date'] = $due_date->toDateString();
+
+        // Create invoice for the selected customer
+        $customer = Customer::find($formFields['customer']);
+        $invoice = $customer->invoices()->create($formFields);
+        // Create all invoice items for the invoice
+        $invoice->invoiceItems()->createMany($formFields['invoiceItems']);
+
+        return redirect()->route('invoices.index')->with('message', 'Invoice created.');
     }
 
     /**
