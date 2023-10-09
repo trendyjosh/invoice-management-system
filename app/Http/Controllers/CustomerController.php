@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,10 +14,11 @@ class CustomerController extends Controller
     /**
      * Display a listing of the customers.
      */
-    public function index()
+    public function index(): Response
     {
+        $user = User::with('customers.invoices')->find(auth()->user()->id);
         return Inertia::render('Customer/Index', [
-            'customers' => auth()->user()->customers,
+            'customers' => $user->customers,
         ]);
     }
 
