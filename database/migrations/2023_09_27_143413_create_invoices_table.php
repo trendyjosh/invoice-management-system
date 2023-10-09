@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,6 +16,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id(); // invoice_number
             $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Customer::class);
             $table->date('date');
             $table->date('due_date');
             $table->timestamps();
