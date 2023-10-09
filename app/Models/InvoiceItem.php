@@ -20,10 +20,23 @@ class InvoiceItem extends Model
     ];
 
     /**
+     * All of the relationships to be touched.
+     */
+    protected $touches = ['invoice'];
+
+    /**
      * Get the invoice that owns the invoice item.
      */
-    public function user(): BelongsTo
+    public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    /**
+     * Get the total cost of this invoice item.
+     */
+    public function getAmount(): int
+    {
+        return $this->quantity * $this->unit_price;
     }
 }

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import InvoicesTable from "@/Components/InvoicesTable.vue";
 import { Head } from "@inertiajs/vue3";
+
+defineProps({
+    invoices: Object,
+});
 </script>
 
 <template>
@@ -17,7 +22,7 @@ import { Head } from "@inertiajs/vue3";
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <!-- TODO -->
+                <InvoicesTable :invoices="invoices" />
             </div>
         </div>
     </AuthenticatedLayout>

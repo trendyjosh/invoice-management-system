@@ -13,10 +13,12 @@ class InvoiceController extends Controller
     /**
      * Display a listing of invoices.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        // Get logged in user and eager load their invoices
+        $user = User::with('invoices.customer')->find(auth()->user()->id);
         return Inertia::render('Invoice/Index', [
-            'invoices' => auth()->user()->invoices,
+            'invoices' => $user->invoices,
         ]);
     }
 
@@ -65,8 +67,18 @@ class InvoiceController extends Controller
     /**
      * Remove the specified invoice from storage.
      */
-    public function destroy(Invoice $invoice)
+    public function destroy(Invoice $invoice): RedirectResponse
     {
-        //
+        $invoice->delete();
+        return redirect()->route('invoices.index')->with('message', 'Invoice deleted.');
+    }
+
+    /**
+     * Display the specified invoice.
+     */
+    public function print(Invoice $invoice): HttpResponse
+    {
+        $invoice->load(['user', 'invoiceItems', 'customer']);
+        return $invoice->printPdf();
     }
 }

@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // Invoice routes
     Route::resource('invoices', InvoiceController::class);
+    Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
+        Route::get('/{invoice}/print', 'print')->name('invoice.print');
+    });
     // Customer routes
     Route::resource('customers', CustomerController::class);
 });
