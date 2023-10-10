@@ -16,16 +16,12 @@ return new class extends Migration
             $table->id(); // customer_number
             $table->foreignIdFor(User::class);
             $table->string('name');
-            $table->string('organisation_number');
-            $table->string('vat_number');
             $table->string('address_1');
-            $table->string('address_2');
+            $table->string('address_2')->nullable();
             $table->string('city');
-            $table->string('county');
+            $table->string('county')->nullable();
             $table->string('postcode');
             $table->string('email');
-            $table->string('phone');
-            $table->string('payment_terms');
             $table->timestamps();
         });
     }
