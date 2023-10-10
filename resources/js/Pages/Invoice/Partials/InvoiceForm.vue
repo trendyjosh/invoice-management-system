@@ -12,8 +12,6 @@ const props = defineProps({
     customers: Object,
     selected: Object,
     invoice: Object,
-    route: String,
-    submit: Function,
 });
 
 const customer = ref<number>(props.selected?.id);
