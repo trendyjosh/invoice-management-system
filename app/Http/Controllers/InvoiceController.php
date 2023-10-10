@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -86,9 +87,13 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified invoice.
      */
-    public function edit(Invoice $invoice)
+    public function edit(Invoice $invoice): Response
     {
-        //
+        // Eager load relationships
+        $invoice->load(['invoiceItems', 'customer']);
+        return Inertia::render('Invoice/Edit', [
+            'invoice' => $invoice,
+        ]);
     }
 
     /**
@@ -96,7 +101,30 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        // Validate input
+        $formFields = Validator::make($request->all(), [
+            'date' => ['required', 'string'],
+            'due_date' => ['required', 'string'],
+            'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
+            'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
+            'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',
+        ], [
+            'invoiceItems.*.*.required_with' => 'All fields are required for Item #:position.',
+        ])->validate();
+
+        // Format js dates for SQL
+        $date = Carbon::createFromFormat('d/m/Y', $formFields['date']);
+        $due_date = Carbon::createFromFormat('d/m/Y', $formFields['due_date']);
+        $formFields['date'] = $date->toDateString();
+        $formFields['due_date'] = $due_date->toDateString();
+
+        // Update basic invoice details
+        $invoice->update($formFields);
+        // Update all invoice items for the invoice
+        $invoice->invoiceItems()->delete();
+        $invoice->invoiceItems()->createMany($formFields['invoiceItems']);
+
+        return redirect()->route('invoices.index')->with('message', 'Invoice updated.');
     }
 
     /**

@@ -26,7 +26,7 @@ defineProps({
                     <td>
                         <Link
                             :href="
-                                route('invoices.show', { invoice: invoice.id })
+                                route('invoices.edit', { invoice: invoice.id })
                             "
                         >
                             {{ invoice.id }}
@@ -35,7 +35,7 @@ defineProps({
                     <td>
                         <Link
                             :href="
-                                route('invoices.show', { invoice: invoice.id })
+                                route('invoices.edit', { invoice: invoice.id })
                             "
                         >
                             {{ invoice.date }}
@@ -55,7 +55,7 @@ defineProps({
                     <td>
                         <Link
                             :href="
-                                route('invoices.show', { invoice: invoice.id })
+                                route('invoices.edit', { invoice: invoice.id })
                             "
                         >
                             {{ invoice.due_date }}

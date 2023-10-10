@@ -11,12 +11,21 @@ import { useForm, Link } from "@inertiajs/vue3";
 const props = defineProps({
     customers: Object,
     selected: Object,
+    invoice: Object,
+    route: String,
+    submit: Function,
 });
 
 const customer = ref<number>(props.selected?.id);
-const date = ref<Date>();
-const due_date = ref<Date>();
-const invoiceItems = ref<Array<InvoiceItem>>(Array<InvoiceItem>());
+const date = ref<Date>(
+    props.invoice ? new Date(props.invoice?.date) : undefined!
+);
+const due_date = ref<Date>(
+    props.invoice ? new Date(props.invoice?.due_date) : undefined!
+);
+const invoiceItems = ref<Array<InvoiceItem>>(
+    props.invoice?.invoice_items || Array<InvoiceItem>()
+);
 
 const form = useForm({
     customer: null,
@@ -40,13 +49,22 @@ function deleteItem(key: number) {
 }
 
 function submit() {
-    form.transform((data) => ({
+    const formData = form.transform((data) => ({
         ...data,
         customer: customer.value,
         date: date.value?.toLocaleDateString("en-GB"),
         due_date: due_date.value?.toLocaleDateString("en-GB"),
         invoiceItems: invoiceItems.value,
-    })).post(route("invoices.store"));
+    }));
+    if (props.invoice) {
+        formData.patch(
+            route("invoices.update", {
+                invoice: props.invoice!.id,
+            })
+        );
+    } else {
+        formData.post(route("invoices.store"));
+    }
 }
 </script>
 
@@ -68,11 +86,12 @@ function submit() {
                 <div class="mt-6">
                     <InputLabel value="Customer" />
 
+                    <p v-if="invoice">{{ invoice.customer.name }}</p>
                     <CustomersSelect
+                        v-else
                         :customers="customers"
                         v-model="customer"
                     />
-
                     <InputError class="mt-2" :message="form.errors.customer" />
                 </div>
 
@@ -144,9 +163,9 @@ function submit() {
                     </InputLabel>
                 </header>
                 <div class="flex items-center gap-4">
-                    <PrimaryButton :disabled="form.processing"
-                        >Create</PrimaryButton
-                    >
+                    <PrimaryButton :disabled="form.processing">{{
+                        invoice ? "Update" : "Create"
+                    }}</PrimaryButton>
 
                     <Transition
                         enter-active-class="transition ease-in-out"
