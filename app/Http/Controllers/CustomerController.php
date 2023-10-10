@@ -25,9 +25,9 @@ class CustomerController extends Controller
     /**
      * Show the form for creating a new customer.
      */
-    public function create()
+    public function create(): Response
     {
-        //
+        return Inertia::render('Customer/Create');
     }
 
     /**
@@ -35,7 +35,21 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate input
+        $formFields = $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'address_1' => ['required', 'string'],
+            'address_2' => ['nullable', 'string'],
+            'city' => ['required', 'string'],
+            'county' => ['nullable', 'string'],
+            'postcode' => ['required', 'string'],
+        ]);
+
+        $user = User::find(auth()->user()->id);
+        $user->customers()->create($formFields);
+
+        return redirect()->route('customers.index')->with('message', 'Customer created.');
     }
 
     /**
