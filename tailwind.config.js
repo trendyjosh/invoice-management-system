@@ -80,6 +80,17 @@ export default {
     },
     plugins: [require("tailwindcss-animate"), require("daisyui"), forms],
     daisyui: {
-        themes: ["light", "dark"],
+        themes: [
+            {
+                myTheme: {
+                    primary: "#1f2937",
+                    secondary: "#818cf8",
+                    accent: "#374151",
+                    success: "#00d900",
+                    warning: "#fbbd23",
+                    error: "#d90000",
+                },
+            },
+        ],
     },
 };
