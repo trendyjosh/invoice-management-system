@@ -20,7 +20,7 @@ defineProps({
             </thead>
             <tbody>
                 <tr
-                    class="hover:bg-gray-100 hover:dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                    class="hover:bg-gray-100 hover:dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-gray-700"
                     v-for="invoice in invoices"
                 >
                     <td>
