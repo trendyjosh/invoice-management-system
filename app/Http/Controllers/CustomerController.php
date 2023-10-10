@@ -65,7 +65,9 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        return Inertia::render('Customer/Edit', [
+            'customer' => $customer,
+        ]);
     }
 
     /**
@@ -73,7 +75,22 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        // Validate input
+        $formFields = $request->validate([
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'address_1' => ['required', 'string'],
+            'address_2' => ['nullable', 'string'],
+            'city' => ['required', 'string'],
+            'county' => ['nullable', 'string'],
+            'postcode' => ['required', 'string'],
+        ]);
+
+
+        // Update basic customer details
+        $customer->update($formFields);
+
+        return redirect()->route('customers.index')->with('message', 'Customer updated.');
     }
 
     /**
@@ -81,6 +98,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return redirect()->route('customers.index')->with('message', 'Customer deleted.');
     }
 }
