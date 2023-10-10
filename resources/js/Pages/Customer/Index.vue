@@ -18,6 +18,12 @@ defineProps({
             >
                 Customers
             </h2>
+            <Link
+                class="btn btn-outline btn-primary"
+                :href="route('customers.create')"
+            >
+                Create
+            </Link>
         </template>
 
         <div class="py-12">

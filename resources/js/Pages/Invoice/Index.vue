@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InvoicesTable from "@/Components/InvoicesTable.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
     invoices: Object,
@@ -18,6 +18,12 @@ defineProps({
             >
                 Invoices
             </h2>
+            <Link
+                class="btn btn-outline btn-primary"
+                :href="route('invoices.create')"
+            >
+                Create
+            </Link>
         </template>
 
         <div class="py-12">
