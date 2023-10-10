@@ -15,7 +15,6 @@ defineProps({
                     <th>Name</th>
                     <th>Address</th>
                     <th>Invoices</th>
-                    <th>View</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,18 +65,6 @@ defineProps({
                         >
                             {{ customer.invoices.length }}
                         </Link>
-                    </td>
-                    <td>
-                        <a
-                            :href="
-                                route('customers.show', {
-                                    customer: customer.id,
-                                })
-                            "
-                            target="_blank"
-                        >
-                            Download
-                        </a>
                     </td>
                 </tr>
             </tbody>
