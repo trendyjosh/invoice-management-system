@@ -63,7 +63,7 @@ const props = defineProps({
             </div>
 
             <div v-if="customer?.postcode" class="mt-6">
-                <InputLabel value="PostCode" />
+                <InputLabel value="Postcode" />
 
                 <p>{{ customer.postcode }}</p>
             </div>
