@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import NumberInput from "@/Components/NumberInput.vue";
+import { Link, useForm, usePage } from "@inertiajs/vue3";
 
 defineProps<{
     mustVerifyEmail?: Boolean;
@@ -15,20 +16,36 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    company_name: user.company_name,
+    company_number: user.company_number,
+    address_1: user.address_1,
+    address_2: user.address_2,
+    city: user.city,
+    county: user.county,
+    postcode: user.postcode,
+    phone: user.phone,
+    bank_name: user.bank_name,
+    bank_acc_no: user.bank_acc_no,
+    bank_sort_code: user.bank_sort_code,
 });
 </script>
 
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Profile Information
+            </h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
                 Update your account's profile information and email address.
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form
+            @submit.prevent="form.patch(route('profile.update'))"
+            class="mt-6 space-y-6"
+        >
             <div>
                 <InputLabel for="name" value="Name" />
 
@@ -58,6 +75,195 @@ const form = useForm({
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div>
+                <InputLabel for="phone" value="Phone" />
+
+                <TextInput
+                    id="phone"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.phone"
+                    required
+                    autocomplete="phone"
+                />
+
+                <InputError class="mt-2" :message="form.errors.phone" />
+            </div>
+
+            <header>
+                <h2
+                    class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                >
+                    Company Information
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    Update your company information and payment details.
+                </p>
+            </header>
+
+            <div>
+                <InputLabel for="company_name" value="Company Name" />
+
+                <TextInput
+                    id="company_name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.company_name"
+                    required
+                    autocomplete="company_name"
+                />
+
+                <InputError class="mt-2" :message="form.errors.company_name" />
+            </div>
+
+            <div>
+                <InputLabel for="company_number" value="Company Number" />
+
+                <TextInput
+                    id="emacompany_numberil"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.company_number"
+                    required
+                    autocomplete="company_number"
+                />
+
+                <InputError
+                    class="mt-2"
+                    :message="form.errors.company_number"
+                />
+            </div>
+
+            <div>
+                <InputLabel for="bank_name" value="Account Name" />
+
+                <TextInput
+                    id="bank_name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.bank_name"
+                    required
+                    autocomplete="bank_name"
+                />
+
+                <InputError class="mt-2" :message="form.errors.bank_name" />
+            </div>
+
+            <div>
+                <InputLabel for="bank_acc_no" value="Account Number" />
+
+                <TextInput
+                    id="bank_acc_no"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.bank_acc_no"
+                    required
+                    autocomplete="bank_acc_no"
+                />
+
+                <InputError class="mt-2" :message="form.errors.bank_acc_no" />
+            </div>
+
+            <div>
+                <InputLabel for="bank_sort_code" value="Sort Code" />
+
+                <TextInput
+                    id="bank_sort_code"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.bank_sort_code"
+                    required
+                    autocomplete="bank_sort_code"
+                />
+
+                <InputError
+                    class="mt-2"
+                    :message="form.errors.bank_sort_code"
+                />
+            </div>
+
+            <header>
+                <h2
+                    class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                >
+                    Address
+                </h2>
+            </header>
+
+            <div>
+                <InputLabel for="address_1" value="Line 1" />
+
+                <TextInput
+                    id="address_1"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.address_1"
+                    required
+                    autocomplete="address_1"
+                />
+
+                <InputError class="mt-2" :message="form.errors.address_1" />
+            </div>
+
+            <div>
+                <InputLabel for="address_2" value="Line 2" />
+
+                <TextInput
+                    id="address_2"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.address_2"
+                    autocomplete="address_2"
+                />
+
+                <InputError class="mt-2" :message="form.errors.address_2" />
+            </div>
+
+            <div>
+                <InputLabel for="city" value="City" />
+
+                <TextInput
+                    id="city"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.city"
+                    required
+                    autocomplete="city"
+                />
+
+                <InputError class="mt-2" :message="form.errors.city" />
+            </div>
+
+            <div>
+                <InputLabel for="county" value="County" />
+
+                <TextInput
+                    id="county"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.county"
+                    autocomplete="county"
+                />
+
+                <InputError class="mt-2" :message="form.errors.county" />
+            </div>
+
+            <div>
+                <InputLabel for="postcode" value="Postcode" />
+
+                <TextInput
+                    id="postcode"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.postcode"
+                    required
+                    autocomplete="postcode"
+                />
+
+                <InputError class="mt-2" :message="form.errors.postcode" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
@@ -90,7 +296,12 @@ const form = useForm({
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                    <p
+                        v-if="form.recentlySuccessful"
+                        class="text-sm text-gray-600 dark:text-gray-400"
+                    >
+                        Saved.
+                    </p>
                 </Transition>
             </div>
         </form>
