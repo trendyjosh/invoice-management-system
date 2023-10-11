@@ -92,7 +92,7 @@ class InvoiceController extends Controller
     /**
      * Update the specified invoice in storage.
      */
-    public function update(InvoiceUpdateRequest $request, Invoice $invoice)
+    public function update(InvoiceUpdateRequest $request, Invoice $invoice): RedirectResponse
     {
         // Validate input
         $formFields = $request->validated();
