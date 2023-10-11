@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,18 +35,10 @@ class CustomerController extends Controller
     /**
      * Store a newly created customer in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request): RedirectResponse
     {
         // Validate input
-        $formFields = $request->validate([
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
-            'address_1' => ['required', 'string'],
-            'address_2' => ['nullable', 'string'],
-            'city' => ['required', 'string'],
-            'county' => ['nullable', 'string'],
-            'postcode' => ['required', 'string'],
-        ]);
+        $formFields = $request->validated();
 
         $user = User::find(auth()->user()->id);
         $user->customers()->create($formFields);
@@ -55,7 +49,7 @@ class CustomerController extends Controller
     /**
      * Display the specified customer.
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer): Response
     {
         $customer->load('invoices.customer');
         return Inertia::render('Customer/Show', [
@@ -66,7 +60,7 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified customer.
      */
-    public function edit(Customer $customer)
+    public function edit(Customer $customer): Response
     {
         return Inertia::render('Customer/Edit', [
             'customer' => $customer,
@@ -76,19 +70,10 @@ class CustomerController extends Controller
     /**
      * Update the specified customer in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
         // Validate input
-        $formFields = $request->validate([
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
-            'address_1' => ['required', 'string'],
-            'address_2' => ['nullable', 'string'],
-            'city' => ['required', 'string'],
-            'county' => ['nullable', 'string'],
-            'postcode' => ['required', 'string'],
-        ]);
-
+        $formFields = $request->validated();
 
         // Update basic customer details
         $customer->update($formFields);
@@ -99,7 +84,7 @@ class CustomerController extends Controller
     /**
      * Remove the specified customer from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer): RedirectResponse
     {
         $customer->delete();
         return redirect()->route('customers.index')->with('message', 'Customer deleted.');

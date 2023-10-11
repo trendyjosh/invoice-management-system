@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceStoreRequest;
+use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -44,19 +46,10 @@ class InvoiceController extends Controller
     /**
      * Store a newly created invoice in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(InvoiceStoreRequest $request): RedirectResponse
     {
         // Validate input
-        $formFields = Validator::make($request->all(), [
-            'customer' => ['required'],
-            'date' => ['required', 'string'],
-            'due_date' => ['required', 'string'],
-            'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
-            'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
-            'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',
-        ], [
-            'invoiceItems.*.*.required_with' => 'All fields are required for Item #:position.',
-        ])->validate();
+        $formFields = $request->validated();
 
         // Include current user
         $formFields['user_id'] = auth()->user()->id;
@@ -99,18 +92,10 @@ class InvoiceController extends Controller
     /**
      * Update the specified invoice in storage.
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(InvoiceUpdateRequest $request, Invoice $invoice)
     {
         // Validate input
-        $formFields = Validator::make($request->all(), [
-            'date' => ['required', 'string'],
-            'due_date' => ['required', 'string'],
-            'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
-            'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
-            'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',
-        ], [
-            'invoiceItems.*.*.required_with' => 'All fields are required for Item #:position.',
-        ])->validate();
+        $formFields = $request->validated();
 
         // Format js dates for SQL
         $date = Carbon::createFromFormat('d/m/Y', $formFields['date']);
