@@ -64,7 +64,7 @@ defineProps({
                     <td>
                         <a
                             :href="
-                                route('invoice.print', { invoice: invoice.id })
+                                route('invoices.print', { invoice: invoice.id })
                             "
                             target="_blank"
                         >
