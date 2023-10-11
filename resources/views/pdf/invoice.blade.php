@@ -60,7 +60,7 @@
                 {{ $invoice->user->address_1 }}<br>
                 @if($invoice->user->address_2){{ $invoice->user->address_2 }}<br>@endif
                 {{ $invoice->user->city }}
-                @if($invoice->user->country)<br>{{ $invoice->user->country }}@endif
+                @if($invoice->user->county)<br>{{ $invoice->user->county }}@endif
                 {{ $invoice->user->postcode }}<br>
             </td>
             <td>
@@ -68,7 +68,7 @@
                 {{ $invoice->customer->address_1 }}<br>
                 @if($invoice->customer->address_2){{ $invoice->customer->address_2 }}<br>@endif
                 {{ $invoice->customer->city }}
-                @if($invoice->customer->country)<br>{{ $invoice->customer->country }}@endif
+                @if($invoice->customer->county)<br>{{ $invoice->customer->county }}@endif
                 {{ $invoice->customer->postcode }}<br>
             </td>
         </tr>

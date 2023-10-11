@@ -27,7 +27,7 @@ class User extends Authenticatable
         'address_1',
         'address_2',
         'city',
-        'country',
+        'county',
         'postcode',
         'phone',
         'bank_name',

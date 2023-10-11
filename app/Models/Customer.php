@@ -20,7 +20,7 @@ class Customer extends Model
         'address_2',
         'postcode',
         'city',
-        'country',
+        'county',
         'email',
         'phone',
         'payment_terms',
