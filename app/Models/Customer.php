@@ -15,6 +15,7 @@ class Customer extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'customer_number',
         'name',
         'address_1',
         'address_2',

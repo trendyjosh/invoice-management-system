@@ -40,7 +40,12 @@ class CustomerController extends Controller
         // Validate input
         $formFields = $request->validated();
 
+        // Get previous customer number
         $user = User::find(auth()->user()->id);
+        $previousCustomerNumber = $user->customers()->latest('customer_number')?->value('customer_number');
+
+        // Insert new customer with incremented customer number
+        $formFields['customer_number'] = ++$previousCustomerNumber ?? 1;
         $user->customers()->create($formFields);
 
         return redirect()->route('customers.index')->with('message', 'Customer created.');
