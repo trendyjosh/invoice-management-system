@@ -35,9 +35,11 @@ function store() {
 const archiveForm = useForm({});
 
 function archive() {
-    archiveForm.patch(route("customers.archive"), {
-        customer: props.customer!.id,
-    });
+    archiveForm.patch(
+        route("customers.archive", {
+            customer: props.customer!.id,
+        })
+    );
 }
 </script>
 
