@@ -13,7 +13,13 @@
             height: 100%;
         }
 
-        h2 {
+        h1 {
+            font-weight: 400;
+            font-size: 38px;
+        }
+
+        h2,
+        h3 {
             margin: 0;
         }
 
@@ -45,14 +51,18 @@
     <table width="100%" cellpadding="5" cellspacing="0">
         <tr>
             <td width="50%">
-                <img src="https://placehold.co/100x100" width="80" height="80" alt="">
+                <!-- <img src="https://placehold.co/100x100" width="80" height="80" alt=""> -->
             </td>
             <td width="50%">
+                <h1>INVOICE</h1>
             </td>
         </tr>
         <tr>
-            <td>
+            <td width="50%">
                 <h2>{{ Str::upper($invoice->user->company_name) }}</h2>
+            </td>
+            <td width="50%">
+                <h3>Invoice to</h3>
             </td>
         </tr>
         <tr>
