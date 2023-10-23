@@ -85,7 +85,7 @@
                 <table class="invoice" width="100%" cellpadding="5">
                     <tr>
                         <td width="25%" align="left">INVOICE NO.</td>
-                        <td width="25%" align="right">{{ $invoice->id }}</td>
+                        <td width="25%" align="right">{{ $invoice->invoice_number }}</td>
                         <td width="25%" align="left">CLIENT NUMBER</td>
                         <td width="25%" align="right">{{ $invoice->customer->id }}</td>
                     </tr>
@@ -159,11 +159,11 @@
                     <tr>
                         <td width="25%">PAYMENT REFERENCE</td>
                         <td width="25%">
-                            &lt;payment_reference&gt;
+                            {{ $invoice->invoice_number }}
                         </td>
                         <td colspan="2" align="right">
                             PAYMENT TERMS<br>
-                            &lt;payment_term&gt;
+                            {{ $invoice->customer->payment_terms }}
                         </td>
                     </tr>
                 </table>
