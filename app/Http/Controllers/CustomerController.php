@@ -18,9 +18,12 @@ class CustomerController extends Controller
      */
     public function index(): Response
     {
+        // Get logged in user
         $user = User::with('customers.invoices')->find(auth()->user()->id);
+        // Get all active customers
+        $customers = $user->customers()->where('status', 1)->with('invoices')->get();
         return Inertia::render('Customer/Index', [
-            'customers' => $user->customers,
+            'customers' => $customers,
         ]);
     }
 
@@ -93,5 +96,17 @@ class CustomerController extends Controller
     {
         $customer->delete();
         return redirect()->route('customers.index')->with('message', 'Customer deleted.');
+    }
+
+    /**
+     * Archive the specified customer.
+     */
+    public function archive(Customer $customer): RedirectResponse
+    {
+        // Update customer status
+        $customer->status = 0;
+        $customer->save();
+
+        return redirect()->route('customers.index')->with('message', 'Customer archived.');
     }
 }

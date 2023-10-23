@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
         'show'
     ]);
     // Customer routes
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('/customers/{customer}/archive', 'archive')->name('customers.archive');
+    });
     Route::resource('customers', CustomerController::class);
 });
 

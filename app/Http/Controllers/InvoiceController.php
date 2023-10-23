@@ -37,8 +37,10 @@ class InvoiceController extends Controller
     {
         // Get logged in user and eager load their customers
         $user = User::with('customers')->find(auth()->user()->id);
+        // Get all active customers
+        $customers = $user->customers()->where('status', 1)->get();
         return Inertia::render('Invoice/Create', [
-            'customers' => $user->customers,
+            'customers' => $customers,
             'selected' => $user->customers()->find($request->customer) // optionally selected customer
         ]);
     }
