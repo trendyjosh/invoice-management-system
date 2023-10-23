@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->after('user_id', function (Blueprint $table) {
-                $table->integer('customer_number');
-                $table->string('type')->nullable();
+            $table->string('unit_type')->after('quantity')->nullable();
+            $table->after('unit_price', function (Blueprint $table) {
+                $table->string('kind')->nullable();
+                $table->boolean('text_row')->default(0);
             });
-            $table->integer('payment_terms')->default(0)->change();
         });
     }
 
@@ -27,10 +27,10 @@ return new class extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             $table->dropColumn([
-                'customer_number',
-                'type',
+                'unit_type',
+                'kind',
+                'text_row',
             ]);
-            $table->integer('payment_terms')->nullable()->change();
         });
     }
 };
