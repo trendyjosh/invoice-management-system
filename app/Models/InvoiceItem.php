@@ -35,7 +35,7 @@ class InvoiceItem extends Model
     /**
      * Get the total cost of this invoice item.
      */
-    public function getAmount(): int
+    public function getAmount(): float
     {
         return $this->quantity * $this->unit_price;
     }
