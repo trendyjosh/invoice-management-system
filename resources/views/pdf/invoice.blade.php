@@ -145,7 +145,7 @@
                         <td width="25%">
                             {{ $invoice->user->bank_name }}<br>
                             {{ $invoice->user->bank_acc_no }}<br>
-                            {{ $invoice->user->bank_sort_code }}<br>
+                            {{ $invoice->user->getSortCode() }}<br>
                         </td>
                         <td width="25%">
                             DUE DATE<br>

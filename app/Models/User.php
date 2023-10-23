@@ -70,4 +70,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Customer::class);
     }
+
+    /**
+     * Format output of sort code to 'xx-xx-xx'.
+     */
+    public function getSortCode(): string
+    {
+        return wordwrap($this->bank_sort_code,  2, '-', true);
+    }
 }
