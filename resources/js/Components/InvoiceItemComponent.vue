@@ -33,6 +33,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
             type="number"
             v-model.number="modelValue.unit_price"
             class="input input-bordered join-item bg-white dark:bg-gray-800"
+            step="0.01"
         />
         <button
             class="lg:ml-5 btn btn-outline btn-error join-item"
