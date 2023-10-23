@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
+        Schema::table('invoice_items', function (Blueprint $table) {
             $table->string('unit_type')->after('quantity')->nullable();
             $table->after('unit_price', function (Blueprint $table) {
                 $table->string('kind')->nullable();
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('customers', function (Blueprint $table) {
+        Schema::table('invoice_items', function (Blueprint $table) {
             $table->dropColumn([
                 'unit_type',
                 'kind',
