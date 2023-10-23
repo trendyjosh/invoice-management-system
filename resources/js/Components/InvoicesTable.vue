@@ -29,7 +29,7 @@ defineProps({
                                 route('invoices.edit', { invoice: invoice.id })
                             "
                         >
-                            {{ invoice.id }}
+                            {{ invoice.invoice_number }}
                         </Link>
                     </td>
                     <td>

@@ -52,7 +52,12 @@ class InvoiceController extends Controller
         $formFields = $request->validated();
 
         // Include current user
-        $formFields['user_id'] = auth()->user()->id;
+        $user = User::find(auth()->user()->id);
+        $formFields['user_id'] = $user->id;
+
+        // Increment previous invoice number
+        $previousInvoiceNumber = $user->invoices()->latest('invoice_number')?->value('invoice_number');
+        $formFields['invoice_number'] = ++$previousInvoiceNumber ?? 1;
 
         // Format js dates for SQL
         $date = Carbon::createFromFormat('d/m/Y', $formFields['date']);
