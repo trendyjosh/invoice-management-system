@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Datepicker from "@/Components/Datepicker.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -15,20 +14,12 @@ const props = defineProps({
 });
 
 const customer = ref<number>(props.selected?.id);
-const date = ref<Date>(
-    props.invoice ? new Date(props.invoice?.date) : undefined!
-);
-const due_date = ref<Date>(
-    props.invoice ? new Date(props.invoice?.due_date) : undefined!
-);
 const invoiceItems = ref<Array<InvoiceItem>>(
     props.invoice?.invoice_items || Array<InvoiceItem>()
 );
 
 const form = useForm({
     customer: null,
-    date: null,
-    due_date: null,
     invoiceItems: null,
 });
 
@@ -50,8 +41,6 @@ function submit() {
     const formData = form.transform((data) => ({
         ...data,
         customer: customer.value,
-        date: date.value?.toLocaleDateString("en-GB"),
-        due_date: due_date.value?.toLocaleDateString("en-GB"),
         invoiceItems: invoiceItems.value,
     }));
     if (props.invoice) {
@@ -91,22 +80,6 @@ function submit() {
                         v-model="customer"
                     />
                     <InputError class="mt-2" :message="form.errors.customer" />
-                </div>
-
-                <div>
-                    <InputLabel value="Date" />
-
-                    <Datepicker v-model="date" />
-
-                    <InputError class="mt-2" :message="form.errors.date" />
-                </div>
-
-                <div>
-                    <InputLabel value="Due date" />
-
-                    <Datepicker v-model="due_date" />
-
-                    <InputError class="mt-2" :message="form.errors.due_date" />
                 </div>
 
                 <header>

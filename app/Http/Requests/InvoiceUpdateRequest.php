@@ -14,8 +14,6 @@ class InvoiceUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => ['required', 'string'],
-            'due_date' => ['required', 'string'],
             'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
             'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
             'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',

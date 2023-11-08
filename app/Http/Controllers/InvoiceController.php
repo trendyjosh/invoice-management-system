@@ -61,14 +61,16 @@ class InvoiceController extends Controller
         $previousInvoiceNumber = $user->invoices()->latest('invoice_number')?->value('invoice_number');
         $formFields['invoice_number'] = ++$previousInvoiceNumber ?? 1;
 
-        // Format js dates for SQL
-        $date = Carbon::createFromFormat('d/m/Y', $formFields['date']);
-        $due_date = Carbon::createFromFormat('d/m/Y', $formFields['due_date']);
+        // Get customer
+        $customer = Customer::find($formFields['customer']);
+
+        // Calculate due date from customer payment terms
+        $date = Carbon::now();
+        $due_date = Carbon::now()->addDays($customer->payment_terms);
         $formFields['date'] = $date->toDateString();
         $formFields['due_date'] = $due_date->toDateString();
 
         // Create invoice for the selected customer
-        $customer = Customer::find($formFields['customer']);
         $invoice = $customer->invoices()->create($formFields);
         // Create all invoice items for the invoice
         $invoice->invoiceItems()->createMany($formFields['invoiceItems']);
@@ -103,12 +105,6 @@ class InvoiceController extends Controller
     {
         // Validate input
         $formFields = $request->validated();
-
-        // Format js dates for SQL
-        $date = Carbon::createFromFormat('d/m/Y', $formFields['date']);
-        $due_date = Carbon::createFromFormat('d/m/Y', $formFields['due_date']);
-        $formFields['date'] = $date->toDateString();
-        $formFields['due_date'] = $due_date->toDateString();
 
         // Update basic invoice details
         $invoice->update($formFields);
