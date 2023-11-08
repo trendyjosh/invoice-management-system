@@ -68,6 +68,12 @@ const props = defineProps({
                 <p>{{ customer.postcode }}</p>
             </div>
 
+            <div v-if="customer?.payment_terms" class="mt-6">
+                <InputLabel value="Payment Terms" />
+
+                <p>{{ customer.payment_terms }}</p>
+            </div>
+
             <div class="flex items-center gap-4">
                 <Link
                     class="btn btn-primary btn-outline"

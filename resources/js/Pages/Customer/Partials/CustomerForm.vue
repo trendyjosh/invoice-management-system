@@ -18,6 +18,7 @@ const storeForm = useForm({
     city: props.customer?.city || "",
     county: props.customer?.county || "",
     postcode: props.customer?.postcode || "",
+    payment_terms: props.customer?.payment_terms || 0,
 });
 
 function store() {
@@ -164,7 +165,7 @@ function archive() {
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="postcode" value="PostCode" />
+                    <InputLabel for="postcode" value="Postcode" />
 
                     <TextInput
                         id="postcode"
@@ -178,6 +179,24 @@ function archive() {
                     <InputError
                         class="mt-2"
                         :message="storeForm.errors.postcode"
+                    />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="payment_terms" value="Payment Terms" />
+
+                    <TextInput
+                        id="payment_terms"
+                        type="number"
+                        class="mt-1 block w-full"
+                        v-model="storeForm.payment_terms"
+                        required
+                        autofocus
+                        autocomplete="payment_terms"
+                    />
+                    <InputError
+                        class="mt-2"
+                        :message="storeForm.errors.payment_terms"
                     />
                 </div>
 

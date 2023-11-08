@@ -21,6 +21,7 @@ class CustomerRequest extends FormRequest
             'city' => ['required', 'string'],
             'county' => ['nullable', 'string'],
             'postcode' => ['required', 'string'],
+            'payment_terms' => ['required', 'integer'],
         ];
     }
 }
