@@ -48,10 +48,8 @@ class Customer extends Model
     /**
      * Format output of payment terms and pluralise.
      */
-    public function paymentTerms(): Attribute
+    public function getPaymentTermsString(): string
     {
-        return Attribute::make(
-            get: fn (string $value) => $value . " " . Str::plural('Day', $value)
-        );
+        return $this->payment_terms . " " . Str::plural('Day', $this->payment_terms);
     }
 }

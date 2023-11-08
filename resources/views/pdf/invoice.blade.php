@@ -173,7 +173,7 @@
                         </td>
                         <td colspan="2" align="right">
                             PAYMENT TERMS<br>
-                            {{ $invoice->customer->payment_terms }}
+                            {{ $invoice->customer->getPaymentTermsString() }}
                         </td>
                     </tr>
                 </table>
