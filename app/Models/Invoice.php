@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 
 class Invoice extends Model
 {
@@ -57,6 +58,24 @@ class Invoice extends Model
             $total += $invoiceItem->getAmount();
         }
         return number_format($total, 2);
+    }
+
+    /**
+     * Get the formatted date for this invoice.
+     */
+    public function getDateString(): string
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $this->date);
+        return $date->format('d/m/Y');
+    }
+
+    /**
+     * Get the formatted due date for this invoice.
+     */
+    public function getDueDateString(): string
+    {
+        $date = Carbon::createFromFormat('Y-m-d', $this->due_date);
+        return $date->format('d/m/Y');
     }
 
     /**

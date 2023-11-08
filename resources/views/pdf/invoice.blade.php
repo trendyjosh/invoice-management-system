@@ -101,11 +101,11 @@
                     </tr>
                     <tr valign="top">
                         <td width="25%" align="left">DATE OF INVOICE</td>
-                        <td width="25%" align="right">{{ $invoice->date }}</td>
+                        <td width="25%" align="right">{{ $invoice->getDateString() }}</td>
                     </tr>
                     <tr valign="top">
                         <td width="25%" align="left">DUE DATE</td>
-                        <td width="25%" align="right">{{ $invoice->due_date }}</td>
+                        <td width="25%" align="right">{{ $invoice->getDueDateString() }}</td>
                     </tr>
                 </table>
                 <table class="items" width="100%" cellpadding="5" cellspacing="0">
@@ -159,7 +159,7 @@
                         </td>
                         <td width="25%">
                             DUE DATE<br>
-                            <b>26/09/2023</b><br>
+                            <b>{{ $invoice->getDueDateString() }}</b><br>
                         </td>
                         <td width="25%" align="right">
                             AMOUNT TO PAY<br>
