@@ -1,5 +1,7 @@
 # Invoicing System
 
+[![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fd1eaa2e6-64c3-4037-b35c-4666c4d64655&style=flat-square)](https://forge.laravel.com/servers/725198/sites/2128375)
+
 ## Local Development
 
 1. Requires [Docker](https://www.docker.com/get-started/) and [composer](https://getcomposer.org/download/)
