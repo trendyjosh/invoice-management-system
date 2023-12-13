@@ -84,6 +84,6 @@ class Invoice extends Model
     public function printPdf(): Response
     {
         $invoicePdf = Pdf::loadView('pdf.invoice', ['invoice' => $this]);
-        return $invoicePdf->stream();
+        return $invoicePdf->stream('invoice_' . $this->invoice_number . '.pdf');
     }
 }
