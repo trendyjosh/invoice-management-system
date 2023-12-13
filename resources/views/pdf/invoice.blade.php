@@ -7,6 +7,10 @@
 
 <body>
     <style>
+        @page {
+            margin-bottom: 100px;
+        }
+
         html {
             font-family: Arial, sans-serif;
             font-size: 14px;
@@ -21,6 +25,10 @@
         h2,
         h3 {
             margin: 0;
+        }
+
+        table {
+            width: 100%;
         }
 
         .totals {
@@ -43,12 +51,21 @@
             font-weight: normal;
         }
 
-        .footer {
+        .summary {
             position: absolute;
-            bottom: 170px;
+            bottom: 0;
+            height: 170px;
+            padding-bottom: 10px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -20px;
+            width: 100%;
+            border-bottom: 1px solid #fcefe9;
         }
     </style>
-    <table width="100%" cellpadding="5" cellspacing="0">
+    <table cellpadding="5" cellspacing="0">
         <tr>
             <td width="50%">
                 <!-- <img src="https://placehold.co/100x100" width="80" height="80" alt=""> -->
@@ -90,47 +107,44 @@
             </td>
             <td></td>
         </tr>
+    </table>
+    <footer></footer>
+    <table class="invoice" cellpadding="5">
         <tr>
-            <td colspan="2">
-                <table class="invoice" width="100%" cellpadding="5">
-                    <tr>
-                        <td width="25%" align="left">INVOICE NO.</td>
-                        <td width="25%" align="right">{{ $invoice->invoice_number }}</td>
-                        <td width="25%" align="left">CLIENT NUMBER</td>
-                        <td width="25%" align="right">{{ $invoice->customer->id }}</td>
-                    </tr>
-                    <tr valign="top">
-                        <td width="25%" align="left">DATE OF INVOICE</td>
-                        <td width="25%" align="right">{{ $invoice->getDateString() }}</td>
-                    </tr>
-                    <tr valign="top">
-                        <td width="25%" align="left">DUE DATE</td>
-                        <td width="25%" align="right">{{ $invoice->getDueDateString() }}</td>
-                    </tr>
-                </table>
-                <table class="items" width="100%" cellpadding="5" cellspacing="0">
-                    <tr>
-                        <th width="50%" align="left">DESCRIPTION</th>
-                        <th width="15%" align="right">QUANTITY</th>
-                        <th width="15%" align="right">UNIT PRICE</th>
-                        <th width="20%" align="right">AMOUNT</th>
-                    </tr>
-                    @foreach($invoice->invoiceItems as $invoiceItem)
-                    <tr>
-                        <td align="left">{{ $invoiceItem->description }}</td>
-                        <td align="right">{{ $invoiceItem->quantity }}</td>
-                        <td align="right">{{ $invoiceItem->unit_price }}</td>
-                        <td align="right"><b>{{ number_format($invoiceItem->getAmount(), 2) }}</b></td>
-                    </tr>
-                    @endforeach
-                </table>
-            </td>
+            <td width="25%" align="left">INVOICE NO.</td>
+            <td width="25%" align="right">{{ $invoice->invoice_number }}</td>
+            <td width="25%" align="left">CLIENT NUMBER</td>
+            <td width="25%" align="right">{{ $invoice->customer->id }}</td>
+        </tr>
+        <tr valign="top">
+            <td width="25%" align="left">DATE OF INVOICE</td>
+            <td width="25%" align="right">{{ $invoice->getDateString() }}</td>
+        </tr>
+        <tr valign="top">
+            <td width="25%" align="left">DUE DATE</td>
+            <td width="25%" align="right">{{ $invoice->getDueDateString() }}</td>
         </tr>
     </table>
-    <table class="footer" width="100%">
+    <table class="items" cellpadding="5" cellspacing="0">
+        <tr>
+            <th width="50%" align="left">DESCRIPTION</th>
+            <th width="15%" align="right">QUANTITY</th>
+            <th width="15%" align="right">UNIT PRICE</th>
+            <th width="20%" align="right">AMOUNT</th>
+        </tr>
+        @foreach($invoice->invoiceItems as $invoiceItem)
+        <tr>
+            <td align="left">{{ $invoiceItem->description }}</td>
+            <td align="right">{{ $invoiceItem->quantity }}</td>
+            <td align="right">{{ $invoiceItem->unit_price }}</td>
+            <td align="right"><b>{{ number_format($invoiceItem->getAmount(), 2) }}</b></td>
+        </tr>
+        @endforeach
+    </table>
+    <table class="summary">
         <tr>
             <td>
-                <table class="totals" width="100%" cellpadding="5" cellspacing="0">
+                <table class="totals" cellpadding="5" cellspacing="0">
                     <tr>
                         <td width="25%"></td>
                         <td width="25%"></td>
@@ -145,7 +159,7 @@
         </tr>
         <tr>
             <td>
-                <table width="100%" cellpadding="5">
+                <table cellpadding="5">
                     <tr>
                         <td width="25%">
                             Bank account name:<br>
@@ -179,7 +193,24 @@
                 </table>
             </td>
         </tr>
+        <tr>
+        </tr>
     </table>
+
+    <script type="text/php">
+        if (isset($pdf) && $pdf->get_page_count() > 1){
+            $x = 490;
+            $y = 795;
+            $text = "Page {PAGE_NUM} of {PAGE_COUNT}";
+            $font = $fontMetrics->get_font("serif", "12");
+            $size = 10;
+            $color = array(0,0,0);
+            $word_space = 0.0;  //  default
+            $char_space = 0.0;  //  default
+            $angle = 0.0;   //  default
+            $pdf->page_text($x, $y, $text, $font, $size, $color, $word_space, $char_space, $angle);
+        }
+    </script>
 </body>
 
 </html>
