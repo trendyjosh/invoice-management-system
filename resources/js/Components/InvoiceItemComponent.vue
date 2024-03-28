@@ -30,12 +30,17 @@ const modelValue = useVModel(props, "modelValue", emits, {
             v-model.number="modelValue.quantity"
             class="input input-bordered join-item bg-white dark:bg-gray-800"
         />
-        <input
-            type="number"
-            v-model.number="modelValue.unit_price"
-            class="input input-bordered join-item bg-white dark:bg-gray-800"
-            step="0.01"
-        />
+        <div
+            class="input input-bordered join-item bg-white dark:bg-gray-800 flex items-center"
+        >
+            <span class="text-gray-500">£</span>
+            <input
+                type="number"
+                v-model.number="modelValue.unit_price"
+                class="grow border-none"
+                step="0.01"
+            />
+        </div>
         <button
             class="lg:ml-5 btn btn-outline btn-error join-item"
             type="button"
