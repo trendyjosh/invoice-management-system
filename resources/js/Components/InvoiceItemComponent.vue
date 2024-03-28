@@ -23,6 +23,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
         <textarea
             v-model="modelValue.description"
             class="input input-bordered join-item bg-white dark:bg-gray-800 w-full"
+            placeholder="Item description"
         ></textarea>
         <input
             type="number"
