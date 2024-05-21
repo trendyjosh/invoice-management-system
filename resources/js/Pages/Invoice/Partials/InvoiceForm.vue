@@ -123,13 +123,15 @@ function submit() {
                         >Amount:
                         {{
                             "£" +
-                            invoiceItems.reduce(
-                                (accumulator, currentValue) =>
-                                    accumulator +
-                                    currentValue.quantity *
-                                        currentValue.unit_price,
-                                0
-                            )
+                            invoiceItems
+                                .reduce(
+                                    (accumulator, currentValue) =>
+                                        accumulator +
+                                        currentValue.quantity *
+                                            currentValue.unit_price,
+                                    0
+                                )
+                                .toFixed(2)
                         }}
                     </InputLabel>
                 </header>
