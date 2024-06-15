@@ -132,4 +132,12 @@ class InvoiceController extends Controller
         $invoice->load(['user', 'invoiceItems', 'customer']);
         return $invoice->printPdf();
     }
+
+    /**
+     * Send an email to the customer with the invoice attached.
+     */
+    public function send(Invoice $invoice): RedirectResponse
+    {
+        //
+    }
 }
