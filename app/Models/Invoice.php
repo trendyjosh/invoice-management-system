@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
@@ -85,5 +86,20 @@ class Invoice extends Model
     {
         $invoicePdf = Pdf::loadView('pdf.invoice', ['invoice' => $this]);
         return $invoicePdf->stream('invoice_' . $this->invoice_number . '.pdf');
+    }
+
+    /**
+     * Generate the invoice as a pdf and save to temp directory.
+     */
+    public function createPdf(): string
+    {
+        $invoicePdf = Pdf::loadView('pdf.invoice', ['invoice' => $this]);
+
+        $filename = 'invoice_' . $this->invoice_number . '.pdf';
+        $path = 'invoices/' . $filename;
+
+        $invoicePdf->save($path, 'temp');
+
+        return $path;
     }
 }
