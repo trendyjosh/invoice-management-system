@@ -19,12 +19,12 @@ defineProps({
                 Customers
             </h2>
             <div class="flex space-between">
-                <Link
+                <a
                     class="btn btn-outline btn-primary mr-2"
                     :href="route('customers.export')"
                 >
                     Export
-                </Link>
+                </a>
                 <Link
                     class="btn btn-outline btn-primary"
                     :href="route('customers.create')"
