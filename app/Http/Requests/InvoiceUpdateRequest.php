@@ -15,8 +15,8 @@ class InvoiceUpdateRequest extends FormRequest
     {
         return [
             'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
-            'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
-            'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',
+            'invoiceItems.*.quantity' => ['required_with:invoiceItems.*.description,invoiceItems.*.unit_price', 'integer', 'min:1'],
+            'invoiceItems.*.unit_price' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.description', 'decimal:0,2', 'min:0.01'],
         ];
     }
 
@@ -29,6 +29,7 @@ class InvoiceUpdateRequest extends FormRequest
     {
         return [
             'invoiceItems.*.*.required_with' => 'All fields are required for Item #:position.',
+            'invoiceItems.*.*.min' => 'There must be a minimum value entered.',
         ];
     }
 }
