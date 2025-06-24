@@ -18,12 +18,20 @@ defineProps({
             >
                 Invoices
             </h2>
-            <Link
-                class="btn btn-outline btn-primary"
-                :href="route('invoices.create')"
-            >
-                Create
-            </Link>
+            <div class="flex space-between">
+                <Link
+                    class="btn btn-outline btn-primary mr-2"
+                    :href="route('invoices.export')"
+                >
+                    Export
+                </Link>
+                <Link
+                    class="btn btn-outline btn-primary"
+                    :href="route('invoices.create')"
+                >
+                    Add
+                </Link>
+            </div>
         </template>
 
         <div class="py-12">
