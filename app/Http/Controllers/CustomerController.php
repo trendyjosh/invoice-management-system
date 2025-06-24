@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 
 class CustomerController extends Controller
 {
@@ -108,5 +109,25 @@ class CustomerController extends Controller
         $customer->save();
 
         return redirect()->route('customers.index')->with('message', 'Customer archived.');
+    }
+
+    /**
+     * Download csv of customers.
+     */
+    public function export()
+    {
+        // Get logged in user
+        $user = User::with('customers')->find(auth()->user()->id);
+
+        // Get all user's customers
+        $customers = $user->customers()->get();
+
+        // Create CSV of customers and stream to browser
+        $csv = SimpleExcelWriter::streamDownload('customers.csv');
+        foreach ($customers as $customer) {
+            $csv->addRow($customer->attributesToArray());
+        }
+
+        return $csv->toBrowser();
     }
 }
