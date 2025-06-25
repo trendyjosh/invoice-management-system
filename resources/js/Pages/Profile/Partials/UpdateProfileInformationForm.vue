@@ -122,11 +122,10 @@ const form = useForm({
                 <InputLabel for="company_number" value="Company Number" />
 
                 <TextInput
-                    id="emacompany_numberil"
+                    id="company_number"
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.company_number"
-                    required
                     autocomplete="company_number"
                 />
 
