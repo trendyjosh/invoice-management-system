@@ -73,7 +73,9 @@ function submit() {
                 <div class="mt-6">
                     <InputLabel value="Customer" />
 
-                    <p v-if="invoice">{{ invoice.customer.name }}</p>
+                    <p v-if="invoice && invoice.customer">
+                        {{ invoice.customer.name }}
+                    </p>
                     <CustomersSelect
                         v-else
                         :customers="customers"
@@ -119,8 +121,8 @@ function submit() {
                         Summary
                     </h2>
 
-                    <InputLabel
-                        >Amount:
+                    <InputLabel>
+                        Amount:
                         {{
                             "£" +
                             invoiceItems.reduce(

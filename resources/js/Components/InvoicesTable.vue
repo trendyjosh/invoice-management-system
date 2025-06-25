@@ -43,6 +43,7 @@ defineProps({
                     </td>
                     <td>
                         <Link
+                            v-if="invoice.customer"
                             :href="
                                 route('customers.show', {
                                     customer: invoice.customer.id,
@@ -51,6 +52,7 @@ defineProps({
                         >
                             {{ invoice.customer.name }}
                         </Link>
+                        <template v-else> Error </template>
                     </td>
                     <td>
                         <Link

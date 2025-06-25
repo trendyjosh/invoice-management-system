@@ -94,7 +94,12 @@ class InvoiceController extends Controller
     {
         // Eager load relationships
         $invoice->load(['invoiceItems', 'customer']);
+        // Get logged in user and eager load their customers
+        $user = User::with('customers')->find(auth()->user()->id);
+        // Get all active customers
+        $customers = $user->customers()->where('status', 1)->get();
         return Inertia::render('Invoice/Edit', [
+            'customers' => $customers,
             'invoice' => $invoice,
         ]);
     }
