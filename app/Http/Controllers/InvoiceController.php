@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 
 class InvoiceController extends Controller
 {
@@ -93,7 +94,12 @@ class InvoiceController extends Controller
     {
         // Eager load relationships
         $invoice->load(['invoiceItems', 'customer']);
+        // Get logged in user and eager load their customers
+        $user = User::with('customers')->find(auth()->user()->id);
+        // Get all active customers
+        $customers = $user->customers()->where('status', 1)->get();
         return Inertia::render('Invoice/Edit', [
+            'customers' => $customers,
             'invoice' => $invoice,
         ]);
     }
@@ -131,5 +137,32 @@ class InvoiceController extends Controller
     {
         $invoice->load(['user', 'invoiceItems', 'customer']);
         return $invoice->printPdf();
+    }
+
+    /**
+     * Download csv of invoices.
+     */
+    public function export()
+    {
+        // Get logged in user
+        $user = User::with([
+            'invoices' => ['invoiceItems', 'customer'],
+        ])->find(auth()->user()->id);
+
+        // Create CSV of invoices and stream to browser
+        $csv = SimpleExcelWriter::streamDownload('invoices.csv');
+        foreach ($user->invoices as $invoice) {
+            foreach ($invoice->invoiceItems as $invoiceItem) {
+                $csv->addRow([
+                    ...$invoice->attributesToArray(),
+                    'customer' => $invoice->customer->name,
+                    'description' => $invoiceItem->description,
+                    'quantity' => $invoiceItem->quantity,
+                    'unit_price' => $invoiceItem->unit_price,
+                ]);
+            }
+        }
+
+        return $csv->toBrowser();
     }
 }

@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     // Invoice routes
     Route::controller(InvoiceController::class)->group(function () {
         Route::get('/invoices/{invoice}/print', 'print')->name('invoices.print');
+        Route::get('/invoices/export', 'export')->name('invoices.export');
     });
     Route::resource('invoices', InvoiceController::class)->except([
         'show'
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     // Customer routes
     Route::controller(CustomerController::class)->group(function () {
         Route::get('/customers/{customer}/archive', 'archive')->name('customers.archive');
+        Route::get('/customers/export', 'export')->name('customers.export');
     });
     Route::resource('customers', CustomerController::class);
 });

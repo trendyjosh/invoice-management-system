@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DateTimeInterface;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
@@ -24,6 +25,14 @@ class Invoice extends Model
         'date',
         'due_date',
     ];
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d');
+    }
 
     /**
      * Get the user that owns the invoice.
