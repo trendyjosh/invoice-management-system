@@ -5,7 +5,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CustomersSelect from "@/Components/CustomersSelect.vue";
 import InvoiceItemComponent from "@/Components/InvoiceItemComponent.vue";
-import { useForm, Link } from "@inertiajs/vue3";
+import { useForm, InertiaForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     customers: Object,
@@ -13,44 +13,47 @@ const props = defineProps({
     invoice: Object,
 });
 
-const customer = ref<number>(props.selected?.id);
-const invoiceItems = ref<Array<InvoiceItem>>(
-    props.invoice?.invoice_items || Array<InvoiceItem>()
-);
-
-const form = useForm({
-    customer: null,
-    invoiceItems: null,
+const form: InertiaForm<{
+    customer: number;
+    invoiceItems: Array<InvoiceItem>;
+}> = useForm({
+    customer: props.selected?.id,
+    invoiceItems: props.invoice?.invoice_items || Array<InvoiceItem>(),
 });
 
+/**
+ * Add a new empty invoice item.
+ */
 function addItem() {
     const invoiceItem = ref<InvoiceItem>({
         description: "",
         quantity: 1,
         unit_price: 0,
     });
-    invoiceItems.value.push(invoiceItem.value);
+    form.invoiceItems.push(invoiceItem.value);
 }
 
+/**
+ * Delete selected invoice item.
+ */
 function deleteItem(key: number) {
-    invoiceItems.value.splice(key, 1);
+    form.invoiceItems.splice(key, 1);
     console.log("Removed: " + key);
 }
 
+/**
+ * Submit invoice form as patch or post depending on
+ * presence of invoice id.
+ */
 function submit() {
-    const formData = form.transform((data) => ({
-        ...data,
-        customer: customer.value,
-        invoiceItems: invoiceItems.value,
-    }));
     if (props.invoice) {
-        formData.patch(
+        form.patch(
             route("invoices.update", {
                 invoice: props.invoice!.id,
             })
         );
     } else {
-        formData.post(route("invoices.store"));
+        form.post(route("invoices.store"));
     }
 }
 </script>
@@ -77,7 +80,7 @@ function submit() {
                     <CustomersSelect
                         v-else
                         :customers="customers"
-                        v-model="customer"
+                        v-model="form.customer"
                     />
                     <InputError class="mt-2" :message="form.errors.customer" />
                 </div>
@@ -97,10 +100,10 @@ function submit() {
 
                 <div class="space-y-6">
                     <InvoiceItemComponent
-                        v-for="(invoiceItem, index) in invoiceItems"
+                        v-for="(invoiceItem, index) in form.invoiceItems"
                         :id="index"
                         :form="form"
-                        v-model="invoiceItems[index]"
+                        v-model="form.invoiceItems[index]"
                         @delete-item="deleteItem"
                     />
                     <button
@@ -123,15 +126,17 @@ function submit() {
                         >Amount:
                         {{
                             "£" +
-                            invoiceItems
-                                .reduce(
-                                    (accumulator, currentValue) =>
-                                        accumulator +
-                                        currentValue.quantity *
-                                            currentValue.unit_price,
-                                    0
-                                )
-                                .toFixed(2)
+                            form.invoiceItems.reduce(
+                                (
+                                    accumulator: number,
+                                    currentValue: InvoiceItem
+                                ) =>
+                                    accumulator +
+                                    currentValue.quantity *
+                                        currentValue.unit_price,
+                                0
+                            )
+                            .toFixed(2)
                         }}
                     </InputLabel>
                 </header>
