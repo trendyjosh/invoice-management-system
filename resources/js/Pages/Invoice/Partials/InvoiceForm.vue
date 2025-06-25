@@ -136,6 +136,7 @@ function submit() {
                                         currentValue.unit_price,
                                 0
                             )
+                            .toFixed(2)
                         }}
                     </InputLabel>
                 </header>
