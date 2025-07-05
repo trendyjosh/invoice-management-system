@@ -116,7 +116,7 @@ class InvoiceController extends Controller
         $date = new Carbon($formFields['date']);
         $dueDate = Invoice::calculateDueDate($formFields['date'], $invoice->customer);
         $formFields['date'] = $date->toDateString();
-        $formFields['dueDate'] = $dueDate->toDateString();
+        $formFields['due_date'] = $dueDate->toDateString();
 
         // Update basic invoice details
         $invoice->update($formFields);
