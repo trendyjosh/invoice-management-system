@@ -20,9 +20,7 @@ const modelValue = useVModel(props, "modelValue", emits, {
         class="select select-bordered w-full bg-white dark:bg-gray-800 disabled:bg-gray-100"
         v-model="modelValue"
     >
-        <option :selected="typeof modelValue === 'undefined'" disabled>
-            Select customer...
-        </option>
+        <option :value="undefined">Select customer...</option>
         <option
             v-for="customer in customers"
             :value="customer.id"

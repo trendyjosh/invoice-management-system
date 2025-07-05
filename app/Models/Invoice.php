@@ -89,6 +89,19 @@ class Invoice extends Model
     }
 
     /**
+     * Calculate the due date for this invoice.
+     */
+    public static function calculateDueDate(string $date, Customer $customer): Carbon
+    {
+        $dueDate = new Carbon($date);
+
+        // Add customer payment terms (integer day value) to get due date
+        $dueDate->addDays($customer->payment_terms);
+
+        return $dueDate;
+    }
+
+    /**
      * Print out the invoice as a pdf.
      */
     public function printPdf(): Response

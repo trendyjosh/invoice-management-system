@@ -15,6 +15,7 @@ class InvoiceStoreRequest extends FormRequest
     {
         return [
             'customer' => ['required', 'exists:App\Models\Customer,id'],
+            'date' => ['required', 'date'],
             'invoiceItems' => ['required', 'array'],
             'invoiceItems.*' => ['array:description,quantity,unit_price'],
             'invoiceItems.*.description' => ['string'],

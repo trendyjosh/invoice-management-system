@@ -6,6 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CustomersSelect from "@/Components/CustomersSelect.vue";
 import InvoiceItemComponent from "@/Components/InvoiceItemComponent.vue";
 import { useForm, InertiaForm } from "@inertiajs/vue3";
+import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     customers: Object,
@@ -15,11 +16,18 @@ const props = defineProps({
 
 const form: InertiaForm<{
     customer: number;
+    date: string;
     invoiceItems: Array<InvoiceItem>;
 }> = useForm({
     customer: props.selected?.id,
+    date: props.invoice?.date,
     invoiceItems: props.invoice?.invoice_items || Array<InvoiceItem>(),
 });
+
+// Set default date as today
+if (!form.date) {
+    form.date = new Date().toISOString().slice(0, 10);
+}
 
 /**
  * Add a new empty invoice item.
@@ -87,6 +95,22 @@ function submit() {
                     <InputError class="mt-2" :message="form.errors.customer" />
                 </div>
 
+                <div class="mt-6">
+                    <InputLabel for="date" value="Date" />
+
+                    <TextInput
+                        id="date"
+                        type="date"
+                        class="mt-1 block w-full"
+                        :class="{
+                            'border-red-500': form.errors.date,
+                        }"
+                        v-model="form.date"
+                        autocomplete="date"
+                    />
+                    <InputError class="mt-2" :message="form.errors.date" />
+                </div>
+
                 <header>
                     <h2
                         class="text-lg font-medium text-gray-900 dark:text-gray-100"
@@ -128,17 +152,18 @@ function submit() {
                         Amount:
                         {{
                             "£" +
-                            form.invoiceItems.reduce(
-                                (
-                                    accumulator: number,
-                                    currentValue: InvoiceItem
-                                ) =>
-                                    accumulator +
-                                    currentValue.quantity *
-                                        currentValue.unit_price,
-                                0
-                            )
-                            .toFixed(2)
+                            form.invoiceItems
+                                .reduce(
+                                    (
+                                        accumulator: number,
+                                        currentValue: InvoiceItem
+                                    ) =>
+                                        accumulator +
+                                        currentValue.quantity *
+                                            currentValue.unit_price,
+                                    0
+                                )
+                                .toFixed(2)
                         }}
                     </InputLabel>
                 </header>
