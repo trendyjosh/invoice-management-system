@@ -66,7 +66,7 @@ class InvoiceController extends Controller
         $customer = Customer::find($formFields['customer']);
 
         // Calculate due date from customer payment terms
-        $date = Carbon::now();
+        $date = new Carbon($formFields['date']);
         $due_date = Carbon::now()->addDays($customer->payment_terms);
         $formFields['date'] = $date->toDateString();
         $formFields['due_date'] = $due_date->toDateString();
