@@ -11,6 +11,7 @@ defineProps({
         <table class="table bg-white dark:bg-gray-800">
             <thead>
                 <tr class="border-b border-gray-100 dark:border-gray-700">
+                    <th>ID</th>
                     <th>No.</th>
                     <th>Date</th>
                     <th>Customer</th>
@@ -23,6 +24,15 @@ defineProps({
                     class="hover:bg-gray-100 hover:dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-gray-700"
                     v-for="invoice in invoices"
                 >
+                    <td>
+                        <Link
+                            :href="
+                                route('invoices.edit', { invoice: invoice.id })
+                            "
+                        >
+                            {{ invoice.id }}
+                        </Link>
+                    </td>
                     <td>
                         <Link
                             :href="

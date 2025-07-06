@@ -58,12 +58,15 @@ class InvoiceController extends Controller
         $user = User::find(auth()->user()->id);
         $formFields['user_id'] = $user->id;
 
-        // Increment previous invoice number
-        $previousInvoiceNumber = $user->invoices()->latest('invoice_number')?->value('invoice_number');
-        $formFields['invoice_number'] = ++$previousInvoiceNumber ?? 1;
-
         // Get customer
         $customer = Customer::find($formFields['customer']);
+
+        // Increment previous invoice number
+        $previousInvoiceNumber = $user->invoices()
+            ->where('customer_id', $customer->id)
+            ->latest('invoice_number')
+            ?->value('invoice_number');
+        $formFields['invoice_number'] = ++$previousInvoiceNumber ?? 1;
 
         // Calculate due date from customer payment terms
         $date = new Carbon($formFields['date']);
