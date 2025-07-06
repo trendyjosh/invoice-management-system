@@ -32,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'bank_name',
         'bank_acc_no',
-        'bank_sort_code'
+        'bank_sort_code',
+        'invoice_number_format',
     ];
 
     /**
