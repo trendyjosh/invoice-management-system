@@ -29,6 +29,7 @@ class ProfileUpdateRequest extends FormRequest
             'bank_name' => ['string', 'max:255'],
             'bank_acc_no' => ['string', 'max:8'],
             'bank_sort_code' => ['string', 'max:6'],
+            'invoice_number_format' => ['integer', 'nullable'],
         ];
     }
 }
