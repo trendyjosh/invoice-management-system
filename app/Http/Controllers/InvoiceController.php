@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -62,10 +63,10 @@ class InvoiceController extends Controller
         $customer = Customer::find($formFields['customer']);
 
         // Increment previous invoice number
-        $previousInvoiceNumber = $user->invoices()
+        $previousInvoiceNumber = DB::table('invoices')
             ->where('customer_id', $customer->id)
-            ->latest('invoice_number')
-            ?->value('invoice_number');
+            ->where('user_id', $user->id)
+            ->max('invoice_number');
         $formFields['invoice_number'] = ++$previousInvoiceNumber ?? 1;
 
         // Calculate due date from customer payment terms
