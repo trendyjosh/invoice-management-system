@@ -17,8 +17,13 @@ class CustomerController extends Controller
     /**
      * Display a listing of the customers.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('viewAny', Customer::class)) {
+            abort(403);
+        }
+
         // Get logged in user
         $user = User::with('customers.invoices')->find(auth()->user()->id);
         // Get all active customers
@@ -31,8 +36,13 @@ class CustomerController extends Controller
     /**
      * Show the form for creating a new customer.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('create', Customer::class)) {
+            abort(403);
+        }
+
         return Inertia::render('Customer/Create');
     }
 
@@ -41,6 +51,11 @@ class CustomerController extends Controller
      */
     public function store(CustomerRequest $request): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('create', Customer::class)) {
+            abort(403);
+        }
+
         // Validate input
         $formFields = $request->validated();
 
@@ -58,8 +73,13 @@ class CustomerController extends Controller
     /**
      * Display the specified customer.
      */
-    public function show(Customer $customer): Response
+    public function show(Request $request, Customer $customer): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('view', $customer)) {
+            abort(403);
+        }
+
         $customer->load('invoices.customer');
         return Inertia::render('Customer/Show', [
             'customer' => $customer,
@@ -69,8 +89,13 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified customer.
      */
-    public function edit(Customer $customer): Response
+    public function edit(Request $request, Customer $customer): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('update', $customer)) {
+            abort(403);
+        }
+
         return Inertia::render('Customer/Edit', [
             'customer' => $customer,
         ]);
@@ -81,6 +106,11 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, Customer $customer): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('update', $customer)) {
+            abort(403);
+        }
+
         // Validate input
         $formFields = $request->validated();
 
@@ -93,8 +123,13 @@ class CustomerController extends Controller
     /**
      * Remove the specified customer from storage.
      */
-    public function destroy(Customer $customer): RedirectResponse
+    public function destroy(Request $request, Customer $customer): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('delete', $customer)) {
+            abort(403);
+        }
+
         $customer->delete();
         return redirect()->route('customers.index')->with('message', 'Customer deleted.');
     }
@@ -102,8 +137,13 @@ class CustomerController extends Controller
     /**
      * Archive the specified customer.
      */
-    public function archive(Customer $customer): RedirectResponse
+    public function archive(Request $request, Customer $customer): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('delete', $customer)) {
+            abort(403);
+        }
+
         // Update customer status
         $customer->status = 0;
         $customer->save();
@@ -114,8 +154,13 @@ class CustomerController extends Controller
     /**
      * Download csv of customers.
      */
-    public function export()
+    public function export(Request $request)
     {
+        // Check authorisation
+        if ($request->user()->cannot('viewAny', Customer::class)) {
+            abort(403);
+        }
+
         // Get logged in user
         $user = User::with('customers')->find(auth()->user()->id);
 

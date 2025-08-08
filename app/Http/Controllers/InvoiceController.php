@@ -25,6 +25,11 @@ class InvoiceController extends Controller
      */
     public function index(Request $request): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('viewAny', Invoice::class)) {
+            abort(403);
+        }
+
         // Get logged in user and eager load their invoices
         $user = User::with('invoices.customer')->find(auth()->user()->id);
         return Inertia::render('Invoice/Index', [
@@ -37,6 +42,11 @@ class InvoiceController extends Controller
      */
     public function create(Request $request): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('create', Invoice::class)) {
+            abort(403);
+        }
+
         // Get logged in user and eager load their customers
         $user = User::with('customers')->find(auth()->user()->id);
         // Get all active customers
@@ -52,6 +62,11 @@ class InvoiceController extends Controller
      */
     public function store(InvoiceStoreRequest $request): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('create', Invoice::class)) {
+            abort(403);
+        }
+
         // Validate input
         $formFields = $request->validated();
 
@@ -94,8 +109,13 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified invoice.
      */
-    public function edit(Invoice $invoice): Response
+    public function edit(Request $request, Invoice $invoice): Response
     {
+        // Check authorisation
+        if ($request->user()->cannot('update', $invoice)) {
+            abort(403);
+        }
+
         // Eager load relationships
         $invoice->load(['invoiceItems', 'customer']);
         // Get logged in user and eager load their customers
@@ -113,6 +133,11 @@ class InvoiceController extends Controller
      */
     public function update(InvoiceUpdateRequest $request, Invoice $invoice): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('update', $invoice)) {
+            abort(403);
+        }
+
         // Validate input
         $formFields = $request->validated();
 
@@ -134,8 +159,13 @@ class InvoiceController extends Controller
     /**
      * Remove the specified invoice from storage.
      */
-    public function destroy(Invoice $invoice): RedirectResponse
+    public function destroy(Request $request, Invoice $invoice): RedirectResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('delete', $invoice)) {
+            abort(403);
+        }
+
         $invoice->delete();
         return redirect()->route('invoices.index')->with('message', 'Invoice deleted.');
     }
@@ -143,8 +173,13 @@ class InvoiceController extends Controller
     /**
      * Display the specified invoice.
      */
-    public function print(Invoice $invoice): HttpResponse
+    public function print(Request $request, Invoice $invoice): HttpResponse
     {
+        // Check authorisation
+        if ($request->user()->cannot('view', $invoice)) {
+            abort(403);
+        }
+
         $invoice->load(['user', 'invoiceItems', 'customer']);
         return $invoice->printPdf();
     }
@@ -152,8 +187,13 @@ class InvoiceController extends Controller
     /**
      * Download csv of invoices.
      */
-    public function export()
+    public function export(Request $request)
     {
+        // Check authorisation
+        if ($request->user()->cannot('viewAny', Invoice::class)) {
+            abort(403);
+        }
+
         // Get logged in user
         $user = User::with([
             'invoices' => ['invoiceItems', 'customer'],
