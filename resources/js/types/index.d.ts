@@ -14,6 +14,7 @@ export interface User {
     bank_name: string;
     bank_acc_no: string;
     bank_sort_code: string;
+    invoice_number_format: number;
 }
 
 export type PageProps<

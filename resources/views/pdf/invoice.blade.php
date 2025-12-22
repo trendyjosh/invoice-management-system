@@ -101,7 +101,7 @@
         </tr>
         <tr>
             <td>
-                COMPANY NUMBER: {{ $invoice->user->company_number }}<br>
+                @if($invoice->user->company_number)COMPANY NUMBER: {{ $invoice->user->company_number }}<br>@endif
                 PHONE: {{ $invoice->user->phone }}<br>
                 EMAIL: {{ $invoice->user->email }}<br>
             </td>

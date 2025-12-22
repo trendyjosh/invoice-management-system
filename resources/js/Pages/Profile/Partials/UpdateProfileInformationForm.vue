@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import InvoiceNumberFormatSelect from "@/Components/InvoiceNumberFormatSelect.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
@@ -26,6 +27,7 @@ const form = useForm({
     bank_name: user.bank_name,
     bank_acc_no: user.bank_acc_no,
     bank_sort_code: user.bank_sort_code,
+    invoice_number_format: user.invoice_number_format,
 });
 </script>
 
@@ -122,11 +124,10 @@ const form = useForm({
                 <InputLabel for="company_number" value="Company Number" />
 
                 <TextInput
-                    id="emacompany_numberil"
+                    id="company_number"
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.company_number"
-                    required
                     autocomplete="company_number"
                 />
 
@@ -263,6 +264,32 @@ const form = useForm({
                 />
 
                 <InputError class="mt-2" :message="form.errors.postcode" />
+            </div>
+
+            <header>
+                <h2
+                    class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                >
+                    Invoice Information
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    Update formatting options for how invoices will be
+                    displayed/generated.
+                </p>
+            </header>
+
+            <div>
+                <InputLabel value="Invoice number format" />
+
+                <InvoiceNumberFormatSelect
+                    v-model="form.invoice_number_format"
+                />
+
+                <InputError
+                    class="mt-2"
+                    :message="form.errors.invoice_number_format"
+                />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

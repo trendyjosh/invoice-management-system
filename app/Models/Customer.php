@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,14 @@ class Customer extends Model
         'phone',
         'payment_terms',
     ];
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d');
+    }
 
     /**
      * Get the user that owns the customer.

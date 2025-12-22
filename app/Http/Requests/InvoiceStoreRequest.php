@@ -14,10 +14,13 @@ class InvoiceStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer' => ['required'],
-            'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
-            'invoiceItems.*.quantity' => 'required_with:invoiceItems.*.description,invoiceItems.*.unit_price',
-            'invoiceItems.*.unit_price' => 'required_with:invoiceItems.*.quantity,invoiceItems.*.description',
+            'customer' => ['required', 'exists:App\Models\Customer,id'],
+            'date' => ['required', 'date'],
+            'invoiceItems' => ['required', 'array'],
+            'invoiceItems.*' => ['array:description,quantity,unit_price'],
+            'invoiceItems.*.description' => ['string'],
+            'invoiceItems.*.quantity' => ['integer', 'min:1'],
+            'invoiceItems.*.unit_price' => ['decimal:0,2', 'min:0.01'],
         ];
     }
 
@@ -29,7 +32,8 @@ class InvoiceStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'invoiceItems.*.*.required_with' => 'All fields are required for Item #:position.',
+            'invoiceItems.*.*' => 'All fields are required for Item #:position.',
+            'invoiceItems.*.*.min' => 'There must be a minimum value entered.',
         ];
     }
 }

@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\PDF as DomPDF;
+use DateTimeInterface;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
@@ -23,11 +25,20 @@ class Invoice extends Model
     protected $fillable = [
         'invoice_number',
         'user_id',
+        'customer_id',
         'date',
         'due_date',
     ];
 
     protected $directory = 'invoices/';
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d');
+    }
 
     /**
      * Get the user that owns the invoice.
@@ -51,6 +62,46 @@ class Invoice extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Get the total cost of the invoice items.
+     */
+    public function getInvoiceNumber(): string
+    {
+        // Default invoice number format
+        $invoiceNumber = $this->invoice_number;
+
+        if ($this->user->invoice_number_format == 1) {
+            // Customer-based invoice number format
+            $invoiceNumber = str_pad($this->customer->id, 2, '0', STR_PAD_LEFT);
+            $invoiceNumber .= '-';
+            $invoiceNumber .= str_pad($this->invoice_number, 3, '0', STR_PAD_LEFT);
+        }
+
+        return $invoiceNumber;
+    }
+
+    /**
+     * Determine if the user is an administrator.
+     */
+    protected function invoiceNumber(): Attribute
+    {
+        return new Attribute(
+            get: function (string $value) {
+                // Default invoice number format
+                $invoiceNumber = $value;
+
+                if ($this->user->invoice_number_format == 1) {
+                    // Customer-based invoice number format
+                    $invoiceNumber = str_pad($this->customer->id, 2, '0', STR_PAD_LEFT);
+                    $invoiceNumber .= '-';
+                    $invoiceNumber .= str_pad($value, 3, '0', STR_PAD_LEFT);
+                }
+
+                return $invoiceNumber;
+            }
+        );
     }
 
     /**
@@ -84,7 +135,20 @@ class Invoice extends Model
     }
 
     /**
-     * Print out the invoice.
+     * Calculate the due date for this invoice.
+     */
+    public static function calculateDueDate(string $date, Customer $customer): Carbon
+    {
+        $dueDate = new Carbon($date);
+
+        // Add customer payment terms (integer day value) to get due date
+        $dueDate->addDays($customer->payment_terms);
+
+        return $dueDate;
+    }
+
+    /**
+     * Print out the invoice as a pdf.
      */
     public function printPdf(): Response
     {

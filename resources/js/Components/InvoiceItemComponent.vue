@@ -23,15 +23,27 @@ const modelValue = useVModel(props, "modelValue", emits, {
         <textarea
             v-model="modelValue.description"
             class="input input-bordered join-item bg-white dark:bg-gray-800 w-full"
+            :class="{
+                'border-red-500':
+                    form.errors['invoiceItems.' + id + '.description'],
+            }"
             placeholder="Item description"
         ></textarea>
         <input
             type="number"
             v-model.number="modelValue.quantity"
             class="input input-bordered join-item bg-white dark:bg-gray-800"
+            :class="{
+                'border-red-500':
+                    form.errors['invoiceItems.' + id + '.quantity'],
+            }"
         />
         <div
             class="input input-bordered join-item bg-white dark:bg-gray-800 flex items-center"
+            :class="{
+                'border-red-500':
+                    form.errors['invoiceItems.' + id + '.unit_price'],
+            }"
         >
             <span class="text-gray-500">£</span>
             <input
@@ -49,8 +61,10 @@ const modelValue = useVModel(props, "modelValue", emits, {
             Remove
         </button>
     </div>
-    <InputError
-        class="mt-2"
-        :message="form.errors['invoiceItems.' + id + '.description']"
-    />
+    <template v-for="input in ['description', 'quantity', 'unit_price']">
+        <InputError
+            class="mt-2"
+            :message="form.errors['invoiceItems.' + id + '.' + input]"
+        />
+    </template>
 </template>

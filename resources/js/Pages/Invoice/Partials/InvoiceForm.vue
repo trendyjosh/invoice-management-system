@@ -5,7 +5,8 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CustomersSelect from "@/Components/CustomersSelect.vue";
 import InvoiceItemComponent from "@/Components/InvoiceItemComponent.vue";
-import { useForm, Link } from "@inertiajs/vue3";
+import { useForm, InertiaForm } from "@inertiajs/vue3";
+import TextInput from "@/Components/TextInput.vue";
 
 const props = defineProps({
     customers: Object,
@@ -13,44 +14,54 @@ const props = defineProps({
     invoice: Object,
 });
 
-const customer = ref<number>(props.selected?.id);
-const invoiceItems = ref<Array<InvoiceItem>>(
-    props.invoice?.invoice_items || Array<InvoiceItem>()
-);
-
-const form = useForm({
-    customer: null,
-    invoiceItems: null,
+const form: InertiaForm<{
+    customer: number;
+    date: string;
+    invoiceItems: Array<InvoiceItem>;
+}> = useForm({
+    customer: props.selected?.id,
+    date: props.invoice?.date,
+    invoiceItems: props.invoice?.invoice_items || Array<InvoiceItem>(),
 });
 
+// Set default date as today
+if (!form.date) {
+    form.date = new Date().toISOString().slice(0, 10);
+}
+
+/**
+ * Add a new empty invoice item.
+ */
 function addItem() {
     const invoiceItem = ref<InvoiceItem>({
         description: "",
         quantity: 1,
         unit_price: 0,
     });
-    invoiceItems.value.push(invoiceItem.value);
+    form.invoiceItems.push(invoiceItem.value);
 }
 
+/**
+ * Delete selected invoice item.
+ */
 function deleteItem(key: number) {
-    invoiceItems.value.splice(key, 1);
+    form.invoiceItems.splice(key, 1);
     console.log("Removed: " + key);
 }
 
+/**
+ * Submit invoice form as patch or post depending on
+ * presence of invoice id.
+ */
 function submit() {
-    const formData = form.transform((data) => ({
-        ...data,
-        customer: customer.value,
-        invoiceItems: invoiceItems.value,
-    }));
     if (props.invoice) {
-        formData.patch(
+        form.patch(
             route("invoices.update", {
                 invoice: props.invoice!.id,
             })
         );
     } else {
-        formData.post(route("invoices.store"));
+        form.post(route("invoices.store"));
     }
 }
 </script>
@@ -73,13 +84,31 @@ function submit() {
                 <div class="mt-6">
                     <InputLabel value="Customer" />
 
-                    <p v-if="invoice">{{ invoice.customer.name }}</p>
+                    <p v-if="invoice && invoice.customer">
+                        {{ invoice.customer.name }}
+                    </p>
                     <CustomersSelect
                         v-else
                         :customers="customers"
-                        v-model="customer"
+                        v-model="form.customer"
                     />
                     <InputError class="mt-2" :message="form.errors.customer" />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="date" value="Date" />
+
+                    <TextInput
+                        id="date"
+                        type="date"
+                        class="mt-1 block w-full"
+                        :class="{
+                            'border-red-500': form.errors.date,
+                        }"
+                        v-model="form.date"
+                        autocomplete="date"
+                    />
+                    <InputError class="mt-2" :message="form.errors.date" />
                 </div>
 
                 <header>
@@ -97,10 +126,10 @@ function submit() {
 
                 <div class="space-y-6">
                     <InvoiceItemComponent
-                        v-for="(invoiceItem, index) in invoiceItems"
+                        v-for="(invoiceItem, index) in form.invoiceItems"
                         :id="index"
                         :form="form"
-                        v-model="invoiceItems[index]"
+                        v-model="form.invoiceItems[index]"
                         @delete-item="deleteItem"
                     />
                     <button
@@ -119,13 +148,16 @@ function submit() {
                         Summary
                     </h2>
 
-                    <InputLabel
-                        >Amount:
+                    <InputLabel>
+                        Amount:
                         {{
                             "£" +
-                            invoiceItems
+                            form.invoiceItems
                                 .reduce(
-                                    (accumulator, currentValue) =>
+                                    (
+                                        accumulator: number,
+                                        currentValue: InvoiceItem
+                                    ) =>
                                         accumulator +
                                         currentValue.quantity *
                                             currentValue.unit_price,

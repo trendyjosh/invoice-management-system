@@ -2,7 +2,6 @@
 import { useVModel } from "@vueuse/core";
 
 const props = defineProps({
-    customers: Object,
     modelValue: Number,
 });
 
@@ -13,6 +12,11 @@ const emits = defineEmits<{
 const modelValue = useVModel(props, "modelValue", emits, {
     passive: true,
 });
+
+const invoiceNumberFormats = [
+    "default (e.g. 7)",
+    "customer-based (e.g. 03-007)",
+];
 </script>
 
 <template>
@@ -20,13 +24,12 @@ const modelValue = useVModel(props, "modelValue", emits, {
         class="select select-bordered w-full bg-white dark:bg-gray-800 disabled:bg-gray-100"
         v-model="modelValue"
     >
-        <option :value="undefined">Select customer...</option>
         <option
-            v-for="customer in customers"
-            :value="customer.id"
-            :selected="modelValue === customer.id"
+            v-for="(invoiceNumberFormat, index) in invoiceNumberFormats"
+            :value="index"
+            :selected="modelValue === index"
         >
-            {{ customer.name }}
+            {{ invoiceNumberFormat }}
         </option>
     </select>
 </template>
