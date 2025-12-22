@@ -1,0 +1,9 @@
+<mjml>
+  <mj-body>
+    <mj-section padding="5px 0">
+      <mj-column>
+        <mj-text color="#98A2B3" padding="5px 10px" align="center" font-size="12px"> Sent from trendyinvoices.co.uk </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

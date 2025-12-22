@@ -1,0 +1,10 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="helvetica" />
+      <mj-body background-color="#FAFAFA" />
+      <mj-text font-size="14px" />
+      <mj-class name="title" font-size="18px" font-weight="bold" />
+    </mj-attributes>
+  </mj-head>
+</mjml>
