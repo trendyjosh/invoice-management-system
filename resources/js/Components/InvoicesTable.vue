@@ -70,6 +70,13 @@ defineProps({
                         >
                             Download
                         </a>
+                        <Link
+                            :href="
+                                route('invoices.send', { invoice: invoice.id })
+                            "
+                        >
+                            Send
+                        </Link>
                     </td>
                 </tr>
             </tbody>
