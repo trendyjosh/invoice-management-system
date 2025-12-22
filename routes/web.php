@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     // Invoice routes
     Route::controller(InvoiceController::class)->group(function () {
         Route::get('/invoices/{invoice}/print', 'print')->name('invoices.print');
+        Route::get('/invoices/{invoice}/send', 'send')->name('invoices.send');
     });
     Route::resource('invoices', InvoiceController::class)->except([
         'show'

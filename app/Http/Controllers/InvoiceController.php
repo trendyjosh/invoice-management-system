@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
+use App\Mail\SendInvoice;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -12,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -138,6 +140,9 @@ class InvoiceController extends Controller
      */
     public function send(Invoice $invoice): RedirectResponse
     {
-        //
+        // Send email
+        Mail::to($invoice->customer->email)->send(new SendInvoice($invoice));
+
+        return redirect()->route('invoices.index')->with('message', 'Invoice sent successfully.');
     }
 }

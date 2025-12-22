@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
@@ -24,6 +24,8 @@ class Invoice extends Model
         'date',
         'due_date',
     ];
+
+    protected $directory = 'invoices/';
 
     /**
      * Get the user that owns the invoice.
@@ -80,26 +82,29 @@ class Invoice extends Model
     }
 
     /**
-     * Print out the invoice as a pdf.
+     * Print out the invoice.
      */
     public function printPdf(): Response
     {
-        $invoicePdf = Pdf::loadView('pdf.invoice', ['invoice' => $this]);
-        return $invoicePdf->stream('invoice_' . $this->invoice_number . '.pdf');
+        $invoicePdf = $this->generatePdf();
+        return $invoicePdf->stream($this->getFilename());
     }
 
     /**
-     * Generate the invoice as a pdf and save to temp directory.
+     * Generate the invoice as a PDF.
      */
-    public function createPdf(): string
+    public function generatePdf(): DomPDF
     {
         $invoicePdf = Pdf::loadView('pdf.invoice', ['invoice' => $this]);
 
-        $filename = 'invoice_' . $this->invoice_number . '.pdf';
-        $path = 'invoices/' . $filename;
+        return $invoicePdf;
+    }
 
-        $invoicePdf->save($path, 'temp');
-
-        return $path;
+    /**
+     * Return pdf filename.
+     */
+    public function getFilename(): string
+    {
+        return 'invoice_' . $this->invoice_number . '.pdf';
     }
 }
