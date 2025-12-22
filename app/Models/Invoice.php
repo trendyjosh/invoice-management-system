@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Mail\SendInvoice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\PDF as DomPDF;
 use Illuminate\Http\Response;
@@ -106,5 +108,18 @@ class Invoice extends Model
     public function getFilename(): string
     {
         return 'invoice_' . $this->invoice_number . '.pdf';
+    }
+
+    /**
+     * Send an invoice.
+     */
+    public function send(): void
+    {
+        // Send email
+        Mail::to($this->customer->email)->send(new SendInvoice($this));
+
+        // Update status in database
+        $this->sent = true;
+        $this->save();
     }
 }
