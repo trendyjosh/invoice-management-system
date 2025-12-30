@@ -2,10 +2,11 @@
 import { Link } from "@inertiajs/vue3";
 import Table from "./Table.vue";
 import Pagination from "./Pagination.vue";
+import { LengthAwarePaginator } from "@/types/pagination";
 
-defineProps({
-    invoices: Object,
-});
+defineProps<{
+    invoices: LengthAwarePaginator;
+}>();
 </script>
 
 <template>
