@@ -22,7 +22,7 @@ class CustomerController extends Controller
         // Get logged in user
         $user = User::with('customers.invoices')->find(auth()->user()->id);
         // Get all active customers
-        $customers = $user->customers()->where('status', 1)->with('invoices')->paginate(10);
+        $customers = $user->customers()->where('status', 1)->with('invoices')->paginate($this->paginate());
         return Inertia::render('Customer/Index', [
             'customers' => $customers,
         ]);
