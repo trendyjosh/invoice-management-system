@@ -28,7 +28,7 @@ class InvoiceController extends Controller
         // Get logged in user and eager load their invoices
         $user = User::with('invoices.customer')->find(auth()->user()->id);
 
-        $invoices = $user->invoices()->orderBy('id', 'desc')->get();
+        $invoices = $user->invoices()->orderBy('id', 'desc')->paginate(10);
 
         return Inertia::render('Invoice/Index', [
             'invoices' => $invoices,
