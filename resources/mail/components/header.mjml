@@ -7,4 +7,9 @@
       <mj-class name="title" font-size="18px" font-weight="bold" />
     </mj-attributes>
   </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column> </mj-column>
+    </mj-section>
+  </mj-body>
 </mjml>
