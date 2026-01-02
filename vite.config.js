@@ -23,6 +23,9 @@ export default defineConfig({
             input: "resources/mail",
             output: "resources/views/emails",
             extension: ".blade.php",
+            mjml: {
+                filePath: "resources/mail",
+            },
         }),
     ],
     server: {

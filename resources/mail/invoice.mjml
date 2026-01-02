@@ -1,15 +1,7 @@
 <mjml>
   <mj-body>
     <!-- header -->
-    <mj-include path="resources/mail/components/header.mjml" />
-
-    <!-- greeting -->
-    <mj-section>
-      <mj-column>
-        <mj-text mj-class="title">Dear {{ $invoice->customer->name }}, </mj-text>
-      </mj-column>
-    </mj-section>
-
+    <mj-include path="./components/header.mjml" />
     <!-- main -->
     <mj-wrapper mj-class="rounded" background-color="#FFFFFF" padding="0">
       <mj-section>
@@ -20,6 +12,6 @@
     </mj-wrapper>
 
     <!-- footer -->
-    <mj-include path="resources/mail/components/footer.mjml" />
+    <mj-include path="./components/footer.mjml" />
   </mj-body>
 </mjml>
