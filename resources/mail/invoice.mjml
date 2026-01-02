@@ -6,7 +6,20 @@
     <mj-wrapper mj-class="rounded" background-color="#FFFFFF" padding="0">
       <mj-section>
         <mj-column>
-          <mj-text> Please see a copy of your invoice attached to this email. </mj-text>
+          <!-- greeting -->
+          <mj-text mj-class="title">
+            <p>Dear {{ $invoice->customer->name }},</p>
+          </mj-text>
+          <!-- content -->
+          <mj-text>
+            <p>Please see the attached invoice {{ $invoice->invoice_number }} for &pound;{{ $invoice->getTotal() }}.</p>
+            <p>The outstanding amount is due on {{ $invoice->getDueDateString() }}.</p>
+          </mj-text>
+          <!-- signature -->
+          <mj-text>
+            <p>Kind regards,</p>
+            <p>{{ $invoice->user->company_name }}</p>
+          </mj-text>
         </mj-column>
       </mj-section>
     </mj-wrapper>
