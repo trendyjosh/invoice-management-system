@@ -2,6 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import Stats from "./Partials/Stats.vue";
+import Charts from "./Partials/Charts.vue";
 </script>
 
 <template>
@@ -23,6 +24,13 @@ import Stats from "./Partials/Stats.vue";
                 >
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <Stats />
+                    </div>
+                </div>
+                <div
+                    class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-12"
+                >
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <Charts />
                     </div>
                 </div>
             </div>
