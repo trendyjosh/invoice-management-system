@@ -23,10 +23,8 @@ Chart.register(
 </script>
 
 <template>
-    <div
-        class="stats stats-vertical lg:stats-horizontal bg-white border border-slate-500 w-full flex"
-    >
-        <div class="stat border-slate-500 w-2/3">
+    <div class="stats stats-vertical lg:stats-horizontal bg-white w-full flex">
+        <div class="stat w-2/3 border-gray-100">
             <div class="stat-title text-primary">Line chart</div>
             <div class="stat-value text-primary">
                 <Line
@@ -49,7 +47,7 @@ Chart.register(
             </div>
         </div>
 
-        <div class="stat border-slate-50 w-1/3">
+        <div class="stat w-1/3 border-gray-100">
             <div class="stat-title text-primary">Doughnut chart</div>
             <div class="stat-value text-primary">
                 <Doughnut
