@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DashboardStat } from "@/types";
 import { Link } from "@inertiajs/vue3";
 import {
     BanknoteArrowUp,
@@ -6,6 +7,15 @@ import {
     ReceiptPoundSterling,
     Users,
 } from "lucide-vue-next";
+
+defineProps<{
+    stats: {
+        customers: DashboardStat;
+        invoices: DashboardStat;
+        paid: DashboardStat;
+        overdue: DashboardStat;
+    };
+}>();
 </script>
 
 <template>
@@ -17,8 +27,12 @@ import {
             <div class="stat-figure text-primary">
                 <Users :size="32" />
             </div>
-            <div class="stat-title text-primary">Customers</div>
-            <div class="stat-value text-primary">4</div>
+            <div class="stat-title text-primary">
+                {{ stats.customers.title }}
+            </div>
+            <div class="stat-value text-primary">
+                {{ stats.customers.value }}
+            </div>
         </Link>
 
         <Link
@@ -28,8 +42,12 @@ import {
             <div class="stat-figure text-primary">
                 <ReceiptPoundSterling :size="32" />
             </div>
-            <div class="stat-title text-primary">Invoices</div>
-            <div class="stat-value text-primary">2</div>
+            <div class="stat-title text-primary">
+                {{ stats.invoices.title }}
+            </div>
+            <div class="stat-value text-primary">
+                {{ stats.invoices.value }}
+            </div>
         </Link>
 
         <Link
@@ -39,9 +57,11 @@ import {
             <div class="stat-figure text-success">
                 <BanknoteArrowUp :size="32" />
             </div>
-            <div class="stat-title text-primary">Paid</div>
-            <div class="stat-value text-success">120</div>
-            <div class="stat-desc text-primary">Total: £9,000</div>
+            <div class="stat-title text-primary">{{ stats.paid.title }}</div>
+            <div class="stat-value text-success">{{ stats.paid.value }}</div>
+            <div class="stat-desc text-primary">
+                {{ stats.paid.description }}
+            </div>
         </Link>
 
         <Link
@@ -51,9 +71,11 @@ import {
             <div class="stat-figure text-error">
                 <BanknoteX :size="32" />
             </div>
-            <div class="stat-title text-primary">Overdue</div>
-            <div class="stat-value text-error">50</div>
-            <div class="stat-desc text-primary">Total: £1,500</div>
+            <div class="stat-title text-primary">{{ stats.overdue.title }}</div>
+            <div class="stat-value text-error">{{ stats.overdue.value }}</div>
+            <div class="stat-desc text-primary">
+                {{ stats.overdue.description }}
+            </div>
         </Link>
     </div>
 </template>

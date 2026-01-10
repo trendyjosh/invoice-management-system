@@ -24,3 +24,14 @@ export type PageProps<
         user: User;
     };
 };
+
+export interface ChartDataset {
+    labels: Array<string>;
+    data: Array<number>;
+}
+
+export interface DashboardStat {
+    title: string;
+    value: number;
+    description?: string;
+}

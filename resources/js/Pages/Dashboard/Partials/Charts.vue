@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ChartDataset } from "@/types";
 import {
     ArcElement,
     CategoryScale,
@@ -20,6 +21,11 @@ Chart.register(
     PointElement,
     LineElement
 );
+
+defineProps<{
+    invoiceDates: ChartDataset;
+    invoiceStates: ChartDataset;
+}>();
 </script>
 
 <template>
@@ -31,10 +37,10 @@ Chart.register(
             <div class="stat-value text-primary">
                 <Line
                     :data="{
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                        labels: invoiceDates.labels,
                         datasets: [
                             {
-                                data: [15, 20, 25, 35, 20],
+                                data: invoiceDates.data,
                                 borderColor: '#5a6eb9',
                             },
                         ],
@@ -54,10 +60,10 @@ Chart.register(
             <div class="stat-value text-primary">
                 <Doughnut
                     :data="{
-                        labels: ['Paid', 'Outstanding', 'Unset'],
+                        labels: invoiceStates.labels,
                         datasets: [
                             {
-                                data: [20, 20, 15],
+                                data: invoiceStates.data,
                                 backgroundColor: [
                                     '#8c9de0',
                                     '#e6e9f2',

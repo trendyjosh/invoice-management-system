@@ -3,6 +3,37 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import Stats from "./Partials/Stats.vue";
 import Charts from "./Partials/Charts.vue";
+
+const invoiceDates = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+    data: [15, 20, 25, 35, 20],
+};
+
+const invoiceStates = {
+    labels: ["Paid", "Outstanding", "Unset"],
+    data: [20, 20, 15],
+};
+
+const stats = {
+    customers: {
+        title: "Customers",
+        value: 4,
+    },
+    invoices: {
+        title: "Invoices",
+        value: 2,
+    },
+    paid: {
+        title: "Paid",
+        value: 120,
+        description: "Total: £9,000",
+    },
+    overdue: {
+        title: "Overdue",
+        value: 50,
+        description: "Total: £1,500",
+    },
+};
 </script>
 
 <template>
@@ -23,14 +54,14 @@ import Charts from "./Partials/Charts.vue";
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"
                 >
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <Stats />
+                        <Stats :stats />
                     </div>
                 </div>
                 <div
                     class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-12"
                 >
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <Charts />
+                        <Charts :invoiceDates :invoiceStates />
                     </div>
                 </div>
             </div>
