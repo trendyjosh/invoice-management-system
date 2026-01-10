@@ -83,26 +83,45 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Return stats of total customers and invoices for current user.
      */
-    public static function getDashboardData(): array
+    public function getDashboardData(): array
     {
+        $totalCustomers = $this->customers->count();
+        $totalInvoices = $this->invoices->count();
+        $paidInvoiceCost = 0;
+        $paidInvoices = 0;
+        $overdueInvoiceCost = 0;
+        $overdueInvoices = 0;
+
+        foreach ($this->invoices as $invoice) {
+            if ($invoice->paid) {
+                $paidInvoices++;
+                $paidInvoiceCost += $invoice->getTotal(false);
+            } else {
+                $overdueInvoices++;
+                $overdueInvoiceCost += $invoice->getTotal(false);
+            }
+        }
+
+        $outstandingInvoices = $totalInvoices - ($paidInvoices + $overdueInvoices);
+
         $statArr = [
             'customers' => [
                 'title' => 'Customers',
-                'value' => 4,
+                'value' => $totalCustomers,
             ],
             'invoices' => [
                 'title' => 'Invoices',
-                'value' => 2,
+                'value' => $totalInvoices,
             ],
             'paid' => [
                 'title' => 'Paid',
-                'value' => 120,
-                'description' => 'Total: £9,000',
+                'value' => $paidInvoices,
+                'description' => 'Total: £' . number_format($paidInvoiceCost, 2),
             ],
             'overdue' => [
                 'title' => 'Overdue',
-                'value' => 50,
-                'description' => 'Total: £1,500',
+                'value' => $overdueInvoices,
+                'description' => 'Total: £' . number_format($overdueInvoiceCost, 2),
             ],
         ];
 
@@ -112,8 +131,8 @@ class User extends Authenticatable implements MustVerifyEmail
                 'data' => [15, 20, 25, 35, 20],
             ],
             'invoiceStates' => [
-                'labels' => ["Paid", "Outstanding", "Unset"],
-                'data' => [20, 20, 15],
+                'labels' => ["Paid", "Outstanding", "Overdue"],
+                'data' => [$paidInvoices, $outstandingInvoices, $overdueInvoices],
             ],
         ];
 

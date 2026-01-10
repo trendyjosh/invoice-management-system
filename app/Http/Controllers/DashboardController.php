@@ -14,7 +14,8 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Response
     {
-        $dashboardStats = User::getDashboardData();
+        $user = User::find(auth()->user()->id);
+        $dashboardStats = $user->getDashboardData();
 
         return Inertia::render('Dashboard/Index', [
             'stats' => $dashboardStats['stats'],

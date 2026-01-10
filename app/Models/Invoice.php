@@ -102,13 +102,13 @@ class Invoice extends Model
     /**
      * Get the total cost of the invoice items.
      */
-    public function getTotal(): string
+    public function getTotal(bool $formatted = true): string
     {
         $total = 0;
         foreach ($this->invoiceItems as $invoiceItem) {
             $total += $invoiceItem->getAmount();
         }
-        return number_format($total, 2);
+        return $formatted ? number_format($total, 2) : $total;
     }
 
     /**
