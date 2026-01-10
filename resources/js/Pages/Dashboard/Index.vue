@@ -3,6 +3,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import Stats from "./Partials/Stats.vue";
 import Charts from "./Partials/Charts.vue";
+import { DashboardStats } from "@/types";
+
+defineProps<{
+    stats: DashboardStats;
+}>();
 
 const invoiceDates = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
@@ -12,27 +17,6 @@ const invoiceDates = {
 const invoiceStates = {
     labels: ["Paid", "Outstanding", "Unset"],
     data: [20, 20, 15],
-};
-
-const stats = {
-    customers: {
-        title: "Customers",
-        value: 4,
-    },
-    invoices: {
-        title: "Invoices",
-        value: 2,
-    },
-    paid: {
-        title: "Paid",
-        value: 120,
-        description: "Total: £9,000",
-    },
-    overdue: {
-        title: "Overdue",
-        value: 50,
-        description: "Total: £1,500",
-    },
 };
 </script>
 

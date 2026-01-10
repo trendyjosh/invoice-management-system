@@ -30,8 +30,15 @@ export interface ChartDataset {
     data: Array<number>;
 }
 
-export interface DashboardStat {
+interface DashboardStat {
     title: string;
     value: number;
     description?: string;
+}
+
+export interface DashboardStats {
+    customers: DashboardStat;
+    invoices: DashboardStat;
+    paid: DashboardStat;
+    overdue: DashboardStat;
 }

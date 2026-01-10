@@ -79,4 +79,33 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return wordwrap($this->bank_sort_code,  2, '-', true);
     }
+
+    /**
+     * Return stats of total customers and invoices for current user.
+     */
+    public static function getDashboardStats(): array
+    {
+        $statArr = [
+            'customers' => [
+                'title' => 'Customers',
+                'value' => 4,
+            ],
+            'invoices' => [
+                'title' => 'Invoices',
+                'value' => 2,
+            ],
+            'paid' => [
+                'title' => 'Paid',
+                'value' => 120,
+                'description' => 'Total: £9,000',
+            ],
+            'overdue' => [
+                'title' => 'Overdue',
+                'value' => 50,
+                'description' => 'Total: £1,500',
+            ],
+        ];
+
+        return $statArr;
+    }
 }

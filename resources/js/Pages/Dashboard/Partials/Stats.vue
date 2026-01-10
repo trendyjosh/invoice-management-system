@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DashboardStat } from "@/types";
+import { DashboardStats } from "@/types";
 import { Link } from "@inertiajs/vue3";
 import {
     BanknoteArrowUp,
@@ -9,12 +9,7 @@ import {
 } from "lucide-vue-next";
 
 defineProps<{
-    stats: {
-        customers: DashboardStat;
-        invoices: DashboardStat;
-        paid: DashboardStat;
-        overdue: DashboardStat;
-    };
+    stats: DashboardStats;
 }>();
 </script>
 
