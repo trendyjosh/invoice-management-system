@@ -64,9 +64,9 @@ defineProps<{
                             {
                                 data: charts.invoiceStates.data,
                                 backgroundColor: [
-                                    '#8c9de0',
-                                    '#e6e9f2',
-                                    '#5a6eb9',
+                                    '#00ff00', // Paid
+                                    '#5a6eb9', // Outstanding
+                                    '#ff0000', // Overdue
                                 ],
                                 hoverOffset: 5,
                             },
