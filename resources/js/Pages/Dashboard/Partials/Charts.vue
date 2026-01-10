@@ -32,7 +32,7 @@ defineProps<{
         class="stats stats-vertical lg:stats-horizontal bg-white w-full flex flex-col lg:flex-row"
     >
         <div class="stat lg:w-2/3 border-gray-100">
-            <div class="stat-title text-primary">Line chart</div>
+            <div class="stat-title text-primary">Invoice dates</div>
             <div class="stat-value text-primary">
                 <Line
                     :data="{
@@ -55,7 +55,7 @@ defineProps<{
         </div>
 
         <div class="stat lg:w-1/3 border-gray-100">
-            <div class="stat-title text-primary">Doughnut chart</div>
+            <div class="stat-title text-primary">Invoice states</div>
             <div class="stat-value text-primary">
                 <Doughnut
                     :data="{
