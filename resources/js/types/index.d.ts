@@ -25,9 +25,14 @@ export type PageProps<
     };
 };
 
-export interface ChartDataset {
+interface ChartDataset {
     labels: Array<string>;
     data: Array<number>;
+}
+
+export interface DashboardCharts {
+    invoiceDates: ChartDataset;
+    invoiceStates: ChartDataset;
 }
 
 interface DashboardStat {

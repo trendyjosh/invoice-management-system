@@ -14,10 +14,11 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Response
     {
-        $dashboardStats = User::getDashboardStats();
+        $dashboardStats = User::getDashboardData();
 
         return Inertia::render('Dashboard/Index', [
-            'stats' => $dashboardStats,
+            'stats' => $dashboardStats['stats'],
+            'charts' => $dashboardStats['charts'],
         ]);
     }
 }

@@ -83,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Return stats of total customers and invoices for current user.
      */
-    public static function getDashboardStats(): array
+    public static function getDashboardData(): array
     {
         $statArr = [
             'customers' => [
@@ -106,6 +106,20 @@ class User extends Authenticatable implements MustVerifyEmail
             ],
         ];
 
-        return $statArr;
+        $chartArr = [
+            'invoiceDates' => [
+                'labels' => ["Jan", "Feb", "Mar", "Apr", "May"],
+                'data' => [15, 20, 25, 35, 20],
+            ],
+            'invoiceStates' => [
+                'labels' => ["Paid", "Outstanding", "Unset"],
+                'data' => [20, 20, 15],
+            ],
+        ];
+
+        return [
+            'stats' => $statArr,
+            'charts' => $chartArr,
+        ];
     }
 }
