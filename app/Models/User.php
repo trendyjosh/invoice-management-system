@@ -126,23 +126,7 @@ class User extends Authenticatable implements MustVerifyEmail
             ],
         ];
 
-        $months = [];
-        $dt = new Carbon();
-        $dt->subMonths(6);
-        for ($i = 0; $i < 6; $i++) {
-            // Add month count
-            $monthString = $dt->shortEnglishMonth;
-            $months[$monthString] = 0;
-            // Count invoices that month
-            foreach ($this->invoices as $invoice) {
-                $invoiceDate = Carbon::parse($invoice->date);
-                if ($dt->isSameMonth($invoiceDate)) {
-                    $months[$monthString]++;
-                }
-            }
-            // Check previous month
-            $dt->addMonth();
-        }
+        $months = $this->getInvoiceMonthTotals();
 
         $chartArr = [
             'invoiceDates' => [
@@ -159,5 +143,65 @@ class User extends Authenticatable implements MustVerifyEmail
             'stats' => $statArr,
             'charts' => $chartArr,
         ];
+    }
+
+    /**
+     * Get invoice totals for previous months up to the provided limit.
+     */
+    protected function getInvoiceMonthTotals(int $monthLimit = 6): array
+    {
+        $months = [];
+
+        // Loop through previous months
+        $dt = new Carbon();
+        $dt->subMonths($monthLimit);
+        for ($i = 0; $i < $monthLimit; $i++) {
+            // Add month count
+            $monthString = $dt->shortEnglishMonth;
+            $months[$monthString] = 0;
+
+            // Count invoices that month
+            foreach ($this->invoices as $invoice) {
+                $invoiceDate = Carbon::parse($invoice->date);
+                if ($dt->isSameMonth($invoiceDate)) {
+                    $months[$monthString]++;
+                }
+            }
+
+            // Check previous month
+            $dt->addMonth();
+        }
+
+        return $months;
+    }
+
+    /**
+     * Get invoice totals for previous months up to the provided limit.
+     */
+    protected function getInvoiceStatesTotals(int $monthLimit = 6): array
+    {
+        $months = [];
+
+        // Loop through previous months
+        $dt = new Carbon();
+        $dt->subMonths($monthLimit);
+        for ($i = 0; $i < $monthLimit; $i++) {
+            // Add month count
+            $monthString = $dt->shortEnglishMonth;
+            $months[$monthString] = 0;
+
+            // Count invoices that month
+            foreach ($this->invoices as $invoice) {
+                $invoiceDate = Carbon::parse($invoice->date);
+                if ($dt->isSameMonth($invoiceDate)) {
+                    $months[$monthString]++;
+                }
+            }
+
+            // Check previous month
+            $dt->addMonth();
+        }
+
+        return $months;
     }
 }
