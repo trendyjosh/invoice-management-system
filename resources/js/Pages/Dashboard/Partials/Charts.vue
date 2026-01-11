@@ -55,7 +55,11 @@ defineProps<{
                                 suggestedMax: 10,
                             },
                         },
-                        
+                        plugins: {
+                            legend: {
+                                display: false,
+                            },
+                        },
                     }"
                 />
             </div>
@@ -71,9 +75,9 @@ defineProps<{
                             {
                                 data: charts.invoiceStates.data,
                                 backgroundColor: [
-                                    '#00ff00', // Paid
+                                    '#00d900', // Paid
                                     '#5a6eb9', // Outstanding
-                                    '#ff0000', // Overdue
+                                    '#d90000', // Overdue
                                 ],
                                 hoverOffset: 5,
                             },
