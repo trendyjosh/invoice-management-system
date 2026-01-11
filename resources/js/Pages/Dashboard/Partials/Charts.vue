@@ -49,6 +49,13 @@ defineProps<{
                         interaction: {
                             intersect: false,
                         },
+                        scales: {
+                            y: {
+                                min: 0,
+                                suggestedMax: 10,
+                            },
+                        },
+                        
                     }"
                 />
             </div>
