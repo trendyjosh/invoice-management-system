@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -125,10 +126,28 @@ class User extends Authenticatable implements MustVerifyEmail
             ],
         ];
 
+        $months = [];
+        $dt = new Carbon();
+        $dt->subMonths(6);
+        for ($i = 0; $i < 6; $i++) {
+            // Add month count
+            $monthString = $dt->shortEnglishMonth;
+            $months[$monthString] = 0;
+            // Count invoices that month
+            foreach ($this->invoices as $invoice) {
+                $invoiceDate = Carbon::parse($invoice->date);
+                if ($dt->isSameMonth($invoiceDate)) {
+                    $months[$monthString]++;
+                }
+            }
+            // Check previous month
+            $dt->addMonth();
+        }
+
         $chartArr = [
             'invoiceDates' => [
-                'labels' => ["Jan", "Feb", "Mar", "Apr", "May"],
-                'data' => [15, 20, 25, 35, 20],
+                'labels' => array_keys($months),
+                'data' => array_values($months),
             ],
             'invoiceStates' => [
                 'labels' => ["Paid", "Outstanding", "Overdue"],
