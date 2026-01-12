@@ -25,6 +25,7 @@ class Invoice extends Model
         'customer_id',
         'date',
         'due_date',
+        'paid',
     ];
 
     /**
