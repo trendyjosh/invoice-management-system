@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -18,27 +19,38 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // Invoice routes
-    Route::controller(InvoiceController::class)->group(function () {
-        Route::get('/invoices/{invoice}/print', 'print')->name('invoices.print');
-        Route::get('/invoices/export', 'export')->name('invoices.export');
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard routes
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index')->name('dashboard');
     });
+
+    // Profile routes
+    Route::controller(ProfileController::class)
+        ->prefix('profile')
+        ->group(function () {
+            Route::get('/', 'edit')->name('profile.edit');
+            Route::patch('/', 'update')->name('profile.update');
+            Route::delete('/', 'destroy')->name('profile.destroy');
+        });
+
+    // Invoice routes
+    Route::controller(InvoiceController::class)
+        ->prefix('invoices')
+        ->group(function () {
+            Route::get('/{invoice}/print', 'print')->name('invoices.print');
+            Route::get('/export', 'export')->name('invoices.export');
+        });
     Route::resource('invoices', InvoiceController::class)->except([
         'show'
     ]);
     // Customer routes
-    Route::controller(CustomerController::class)->group(function () {
-        Route::get('/customers/{customer}/archive', 'archive')->name('customers.archive');
-        Route::get('/customers/export', 'export')->name('customers.export');
-    });
+    Route::controller(CustomerController::class)
+        ->prefix('customers')
+        ->group(function () {
+            Route::get('/{customer}/archive', 'archive')->name('customers.archive');
+            Route::get('/export', 'export')->name('customers.export');
+        });
     Route::resource('customers', CustomerController::class);
 });
 

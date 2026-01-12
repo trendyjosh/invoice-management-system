@@ -24,3 +24,26 @@ export type PageProps<
         user: User;
     };
 };
+
+interface ChartDataset {
+    labels: Array<string>;
+    data: Array<number>;
+}
+
+export interface DashboardCharts {
+    invoiceDates: ChartDataset;
+    invoiceStates: ChartDataset;
+}
+
+interface DashboardStat {
+    title: string;
+    value: number;
+    description?: string;
+}
+
+export interface DashboardStats {
+    customers: DashboardStat;
+    invoices: DashboardStat;
+    paid: DashboardStat;
+    overdue: DashboardStat;
+}

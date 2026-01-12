@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -78,5 +79,129 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getSortCode(): string
     {
         return wordwrap($this->bank_sort_code,  2, '-', true);
+    }
+
+    /**
+     * Return stats of total customers and invoices for current user.
+     */
+    public function getDashboardData(): array
+    {
+        $totalCustomers = $this->customers->count();
+        $totalInvoices = $this->invoices->count();
+        $paidInvoiceCost = 0;
+        $paidInvoices = 0;
+        $overdueInvoiceCost = 0;
+        $overdueInvoices = 0;
+
+        foreach ($this->invoices as $invoice) {
+            if ($invoice->paid) {
+                $paidInvoices++;
+                $paidInvoiceCost += $invoice->getTotal(false);
+            } else {
+                $overdueInvoices++;
+                $overdueInvoiceCost += $invoice->getTotal(false);
+            }
+        }
+
+        $outstandingInvoices = $totalInvoices - ($paidInvoices + $overdueInvoices);
+
+        $statArr = [
+            'customers' => [
+                'title' => 'Customers',
+                'value' => $totalCustomers,
+            ],
+            'invoices' => [
+                'title' => 'Invoices',
+                'value' => $totalInvoices,
+            ],
+            'paid' => [
+                'title' => 'Paid',
+                'value' => $paidInvoices,
+                'description' => 'Total: £' . number_format($paidInvoiceCost, 2),
+            ],
+            'overdue' => [
+                'title' => 'Overdue',
+                'value' => $overdueInvoices,
+                'description' => 'Total: £' . number_format($overdueInvoiceCost, 2),
+            ],
+        ];
+
+        $months = $this->getInvoiceMonthTotals();
+
+        $chartArr = [
+            'invoiceDates' => [
+                'labels' => array_keys($months),
+                'data' => array_values($months),
+            ],
+            'invoiceStates' => [
+                'labels' => ["Paid", "Outstanding", "Overdue"],
+                'data' => [$paidInvoices, $outstandingInvoices, $overdueInvoices],
+            ],
+        ];
+
+        return [
+            'stats' => $statArr,
+            'charts' => $chartArr,
+        ];
+    }
+
+    /**
+     * Get invoice totals for previous months up to the provided limit.
+     */
+    protected function getInvoiceMonthTotals(int $monthLimit = 6): array
+    {
+        $months = [];
+
+        // Loop through previous months
+        $dt = new Carbon();
+        $dt->subMonths($monthLimit);
+        for ($i = 0; $i < $monthLimit; $i++) {
+            // Add month count
+            $monthString = $dt->shortEnglishMonth;
+            $months[$monthString] = 0;
+
+            // Count invoices that month
+            foreach ($this->invoices as $invoice) {
+                $invoiceDate = Carbon::parse($invoice->date);
+                if ($dt->isSameMonth($invoiceDate)) {
+                    $months[$monthString]++;
+                }
+            }
+
+            // Check previous month
+            $dt->addMonth();
+        }
+
+        return $months;
+    }
+
+    /**
+     * Get invoice totals for previous months up to the provided limit.
+     */
+    protected function getInvoiceStatesTotals(int $monthLimit = 6): array
+    {
+        $months = [];
+
+        // Loop through previous months
+        $dt = new Carbon();
+        $dt->subMonths($monthLimit);
+        for ($i = 0; $i < $monthLimit; $i++) {
+            // Add month count
+            $monthString = $dt->shortEnglishMonth;
+            $months[$monthString] = 0;
+
+            // Count invoices that month
+            foreach ($this->invoices as $invoice) {
+                $invoiceDate = Carbon::parse($invoice->date);
+                if ($dt->isSameMonth($invoiceDate)) {
+                    $months[$monthString]++;
+                }
+            }
+
+            // Check previous month
+            $dt->addMonth();
+        }
+
+        return $months;
     }
 }
