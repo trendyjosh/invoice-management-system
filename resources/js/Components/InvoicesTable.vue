@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
+import Table from "./Table.vue";
+import Pagination from "./Pagination.vue";
+import { LengthAwarePaginator } from "@/types/pagination";
 
-defineProps({
-    invoices: Object,
-});
+defineProps<{
+    invoices: LengthAwarePaginator;
+}>();
 </script>
 
 <template>
-    <div class="overflow-x-auto">
-        <table class="table bg-white dark:bg-gray-800">
-            <thead>
+    <template v-if="invoices?.data">
+        <Table>
+            <template #head>
                 <tr class="border-b border-gray-100 dark:border-gray-700">
                     <th>ID</th>
                     <th>No.</th>
@@ -18,11 +21,11 @@ defineProps({
                     <th>Due Date</th>
                     <th>View</th>
                 </tr>
-            </thead>
-            <tbody>
+            </template>
+            <template #body>
                 <tr
                     class="hover:bg-gray-100 hover:dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-100 dark:border-gray-700"
-                    v-for="invoice in invoices"
+                    v-for="invoice in invoices.data"
                 >
                     <td>
                         <Link
@@ -84,7 +87,9 @@ defineProps({
                         </a>
                     </td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
+            </template>
+        </Table>
+        <Pagination :paginator="invoices" />
+    </template>
+    <template v-else> No results </template>
 </template>

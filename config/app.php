@@ -185,4 +185,17 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Pagination
+    |--------------------------------------------------------------------------
+    |
+    | Here you can specify the pagination config options. 
+    |
+    */
+
+    'pagination' => [
+        'default' => env('APP_PAGINATION', 10),
+    ],
+
 ];

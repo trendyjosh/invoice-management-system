@@ -2,10 +2,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InvoicesTable from "@/Components/InvoicesTable.vue";
 import { Head, Link } from "@inertiajs/vue3";
+import { LengthAwarePaginator } from "@/types/pagination";
 
-defineProps({
-    invoices: Object,
-});
+defineProps<{
+    invoices: LengthAwarePaginator;
+}>();
 </script>
 
 <template>
