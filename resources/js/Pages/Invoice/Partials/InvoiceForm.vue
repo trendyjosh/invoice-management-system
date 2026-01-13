@@ -7,6 +7,7 @@ import CustomersSelect from "@/Components/CustomersSelect.vue";
 import InvoiceItemComponent from "@/Components/InvoiceItemComponent.vue";
 import { useForm, InertiaForm } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
+import Checkbox from "@/Components/Checkbox.vue";
 
 const props = defineProps({
     customers: Object,
@@ -17,10 +18,12 @@ const props = defineProps({
 const form: InertiaForm<{
     customer: number;
     date: string;
+    paid: boolean;
     invoiceItems: Array<InvoiceItem>;
 }> = useForm({
     customer: props.selected?.id,
     date: props.invoice?.date,
+    paid: Boolean(props.invoice?.paid),
     invoiceItems: props.invoice?.invoice_items || Array<InvoiceItem>(),
 });
 
@@ -81,6 +84,7 @@ function submit() {
                         Select your customer and invoice dates.
                     </p>
                 </header>
+
                 <div class="mt-6">
                     <InputLabel value="Customer" />
 
@@ -167,6 +171,26 @@ function submit() {
                         }}
                     </InputLabel>
                 </header>
+
+                <div class="mt-6">
+                    <label class="flex items-center">
+                        <Checkbox
+                            name="paid"
+                            :class="{
+                                'border-red-500': form.errors.paid,
+                            }"
+                            v-model:checked="form.paid"
+                        />
+                        <span
+                            class="ml-2 text-sm text-gray-600 dark:text-gray-400"
+                        >
+                            Paid
+                        </span>
+                    </label>
+
+                    <InputError class="mt-2" :message="form.errors.paid" />
+                </div>
+
                 <div class="flex items-center gap-4">
                     <PrimaryButton :disabled="form.processing">{{
                         invoice ? "Update" : "Create"

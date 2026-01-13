@@ -18,6 +18,7 @@ class InvoiceUpdateRequest extends FormRequest
             'invoiceItems.*.description' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.unit_price', 'string'],
             'invoiceItems.*.quantity' => ['required_with:invoiceItems.*.description,invoiceItems.*.unit_price', 'integer', 'min:1'],
             'invoiceItems.*.unit_price' => ['required_with:invoiceItems.*.quantity,invoiceItems.*.description', 'decimal:0,2', 'min:0.01'],
+            'paid' => ['required', 'boolean'],
         ];
     }
 
