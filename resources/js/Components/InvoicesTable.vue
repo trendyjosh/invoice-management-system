@@ -19,6 +19,7 @@ defineProps<{
                     <th>Date</th>
                     <th>Customer</th>
                     <th>Due Date</th>
+                    <th>Status</th>
                     <th>View</th>
                 </tr>
             </template>
@@ -75,6 +76,9 @@ defineProps<{
                         >
                             {{ invoice.due_date }}
                         </Link>
+                    </td>
+                    <td>
+                        {{ invoice.paid ? "Paid" : "Outstanding" }}
                     </td>
                     <td>
                         <a
