@@ -92,18 +92,24 @@ class User extends Authenticatable implements MustVerifyEmail
         $paidInvoices = 0;
         $overdueInvoiceCost = 0;
         $overdueInvoices = 0;
+        $outstandingInvoices = 0;
 
         foreach ($this->invoices as $invoice) {
-            if ($invoice->paid) {
-                $paidInvoices++;
-                $paidInvoiceCost += $invoice->getTotal(false);
-            } else {
-                $overdueInvoices++;
-                $overdueInvoiceCost += $invoice->getTotal(false);
+            switch ($invoice->status) {
+                case 'paid':
+                    $paidInvoices++;
+                    $paidInvoiceCost += $invoice->getTotal(false);
+                    break;
+                case 'overdue':
+                    $overdueInvoices++;
+                    $overdueInvoiceCost += $invoice->getTotal(false);
+                    break;
+
+                default:
+                    $outstandingInvoices++;
+                    break;
             }
         }
-
-        $outstandingInvoices = $totalInvoices - ($paidInvoices + $overdueInvoices);
 
         $statArr = [
             'customers' => [
