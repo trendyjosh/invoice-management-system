@@ -161,7 +161,7 @@ class User extends Authenticatable implements MustVerifyEmail
         // Loop through previous months
         $dt = new Carbon();
         $dt->subMonths($monthLimit);
-        for ($i = 0; $i < $monthLimit; $i++) {
+        for ($i = 0; $i <= $monthLimit; $i++) {
             // Add month count
             $monthString = $dt->shortEnglishMonth;
             $months[$monthString] = 0;
