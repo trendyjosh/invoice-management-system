@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::get('/{invoice}/print', 'print')->name('invoices.print');
             Route::get('/export', 'export')->name('invoices.export');
+            Route::post('/action', 'action')->name('invoices.action');
         });
     Route::resource('invoices', InvoiceController::class)->except([
         'show'

@@ -21,6 +21,7 @@ class InvoiceStoreRequest extends FormRequest
             'invoiceItems.*.description' => ['string'],
             'invoiceItems.*.quantity' => ['integer', 'min:1'],
             'invoiceItems.*.unit_price' => ['decimal:0,2', 'min:0.01'],
+            'paid' => ['required', 'boolean'],
         ];
     }
 

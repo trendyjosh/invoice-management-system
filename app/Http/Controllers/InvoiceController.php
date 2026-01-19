@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceActionRequest;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Customer;
 use App\Models\Invoice;
-use App\Models\InvoiceItem;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\SimpleExcel\SimpleExcelWriter;
@@ -217,5 +216,38 @@ class InvoiceController extends Controller
         }
 
         return $csv->toBrowser();
+    }
+
+    /**
+     * Update invoices with specified action.
+     */
+    public function action(InvoiceActionRequest $request): RedirectResponse
+    {
+        // Check authorisation
+        if ($request->user()->cannot('action', Invoice::class)) {
+            abort(403);
+        }
+
+        // Validate input
+        $formFields = $request->validated();
+
+        // Include current user
+        $user = User::find(auth()->user()->id);
+
+        // Increment previous invoice number
+        foreach ($formFields['invoices'] as $invoiceId) {
+            $invoice = $user->invoices()->find($invoiceId);
+            switch ($formFields['action']) {
+                case 'paid':
+                    $invoice->paid = true;
+                    break;
+                case 'outstanding':
+                    $invoice->paid = false;
+                    break;
+            }
+            $invoice->save();
+        }
+
+        return redirect()->route('invoices.index')->with('message', 'Invoices updated.');
     }
 }

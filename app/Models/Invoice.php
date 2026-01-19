@@ -25,7 +25,13 @@ class Invoice extends Model
         'customer_id',
         'date',
         'due_date',
+        'paid',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = ['status'];
 
     /**
      * Prepare a date for array / JSON serialization.
@@ -33,6 +39,24 @@ class Invoice extends Model
     protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format('Y-m-d');
+    }
+
+    /**
+     * Return the invoice status.
+     */
+    protected function status(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                if ($this->paid) {
+                    return 'paid';
+                }
+                if ($this->due_date < now()) {
+                    return 'overdue';
+                }
+                return 'outstanding';
+            },
+        );
     }
 
     /**

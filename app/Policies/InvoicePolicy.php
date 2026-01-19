@@ -63,4 +63,12 @@ class InvoicePolicy
     {
         return false;
     }
+
+    /**
+     * Determine whether the user can perform the action on invoices.
+     */
+    public function action(User $user): bool
+    {
+        return true;
+    }
 }
