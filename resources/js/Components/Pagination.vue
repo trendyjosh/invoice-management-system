@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <nav class="join bg-white">
+    <nav class="join bg-white" v-if="paginator.total > 1">
         <template v-for="link in paginator.links">
             <Link
                 class="join-item btn btn-outline btn-primary"
