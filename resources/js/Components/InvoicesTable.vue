@@ -3,9 +3,12 @@ import { InertiaForm, Link, useForm } from "@inertiajs/vue3";
 import Table from "./Table.vue";
 import Pagination from "./Pagination.vue";
 import { LengthAwarePaginator } from "@/types/pagination";
+import { ArrowDown, ArrowUp } from "lucide-vue-next";
 
 const props = defineProps<{
     invoices: LengthAwarePaginator;
+    orderKey: string;
+    orderDir: string;
 }>();
 
 const form: InertiaForm<{
@@ -45,6 +48,46 @@ function toggleAll(event: Event) {
         }
     }
 }
+
+// Prepare table head details
+const tableHeads = [
+    {
+        label: "ID",
+        key: "id",
+        active: props.orderKey == "id",
+        asc: props.orderKey == "id" && props.orderDir == "desc",
+    },
+    {
+        label: "No.",
+        key: "number",
+        active: props.orderKey == "number",
+        asc: props.orderKey == "number" && props.orderDir == "desc",
+    },
+    {
+        label: "Date",
+        key: "date",
+        active: props.orderKey == "date",
+        asc: props.orderKey == "date" && props.orderDir == "desc",
+    },
+    {
+        label: "Customer",
+        key: "customer",
+        active: props.orderKey == "customer",
+        asc: props.orderKey == "customer" && props.orderDir == "desc",
+    },
+    {
+        label: "Due Date",
+        key: "due_date",
+        active: props.orderKey == "due_date",
+        asc: props.orderKey == "due_date" && props.orderDir == "desc",
+    },
+    {
+        label: "Status",
+        key: "status",
+        active: props.orderKey == "status",
+        asc: props.orderKey == "status" && props.orderDir == "desc",
+    },
+];
 </script>
 
 <template>
@@ -75,12 +118,27 @@ function toggleAll(event: Event) {
                             @change="toggleAll"
                         />
                     </th>
-                    <th>ID</th>
-                    <th>No.</th>
-                    <th>Date</th>
-                    <th>Customer</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
+                    <th v-for="tableHead in tableHeads">
+                        <Link
+                            :href="
+                                route('invoices.index', {
+                                    sort: tableHead.key,
+                                    asc: tableHead.asc,
+                                })
+                            "
+                            class="flex items-center"
+                        >
+                            {{ tableHead.label }}
+                            <template v-if="tableHead.active && tableHead.asc">
+                                <ArrowUp />
+                            </template>
+                            <template
+                                v-else-if="tableHead.active && !tableHead.asc"
+                            >
+                                <ArrowDown />
+                            </template>
+                        </Link>
+                    </th>
                     <th>View</th>
                 </tr>
             </template>

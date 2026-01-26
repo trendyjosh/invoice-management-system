@@ -210,4 +210,43 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $months;
     }
+
+    /**
+     * Sort invoices relationship using sort filters from request.
+     */
+    public function getSortedInvoices(array $formFields, int $paginateLimit): array
+    {
+        // Get order by direction
+        $orderDir = 'asc';
+        if (isset($formFields['asc'])) {
+            $orderDir = $formFields['asc'] ? 'asc' : 'desc';
+        }
+
+        // Get order by column
+        $sortKey = $formFields['sort'] ?? 'id';
+        switch ($sortKey) {
+            case 'customer':
+                $orderKey = 'customer_id';
+                break;
+            case 'id':
+            case 'number':
+            case 'date':
+            case 'due_date':
+            case 'status':
+                $orderKey = $sortKey;
+                break;
+            default:
+                $orderKey = 'id';
+                break;
+        }
+
+        // Apply sorting rules
+        $invoices = $this->invoices()->orderBy($orderKey, $orderDir)->paginate($paginateLimit);
+
+        return [
+            $invoices,
+            $sortKey,
+            $orderDir,
+        ];
+    }
 }

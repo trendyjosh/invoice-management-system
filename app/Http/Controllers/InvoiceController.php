@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceActionRequest;
+use App\Http\Requests\InvoiceSortRequest;
 use App\Http\Requests\InvoiceStoreRequest;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Models\Customer;
@@ -22,20 +23,29 @@ class InvoiceController extends Controller
     /**
      * Display a listing of invoices.
      */
-    public function index(Request $request): Response
+    public function index(InvoiceSortRequest $request): Response
     {
         // Check authorisation
         if ($request->user()->cannot('viewAny', Invoice::class)) {
             abort(403);
         }
 
+        // Validate input
+        $formFields = $request->validated();
+
         // Get logged in user and eager load their invoices
         $user = User::with('invoices.customer')->find(auth()->user()->id);
 
-        $invoices = $user->invoices()->orderBy('id', 'desc')->paginate($this->paginate());
+        [
+            $invoices,
+            $orderKey,
+            $orderDir,
+        ] = $user->getSortedInvoices($formFields, $this->paginate());
 
         return Inertia::render('Invoice/Index', [
             'invoices' => $invoices,
+            'orderKey' => $orderKey,
+            'orderDir' => $orderDir,
         ]);
     }
 

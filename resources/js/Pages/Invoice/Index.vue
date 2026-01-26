@@ -6,6 +6,8 @@ import { LengthAwarePaginator } from "@/types/pagination";
 
 defineProps<{
     invoices: LengthAwarePaginator;
+    orderKey: string;
+    orderDir: string;
 }>();
 </script>
 
@@ -37,7 +39,7 @@ defineProps<{
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <InvoicesTable :invoices="invoices" />
+                <InvoicesTable :invoices :orderKey :orderDir />
             </div>
         </div>
     </AuthenticatedLayout>
