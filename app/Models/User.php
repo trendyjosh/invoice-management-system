@@ -243,7 +243,10 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         // Apply sorting rules
-        $invoices = $this->invoices()->orderBy($orderKey, $orderDir)->paginate($paginateLimit);
+        $invoices = $this->invoices()
+            ->orderBy($orderKey, $orderDir)
+            ->paginate($paginateLimit)
+            ->withQueryString();
 
         return [
             $invoices,
