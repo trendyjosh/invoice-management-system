@@ -228,11 +228,13 @@ class User extends Authenticatable implements MustVerifyEmail
             case 'customer':
                 $orderKey = 'customer_id';
                 break;
+            case 'status':
+                $orderKey = 'paid';
+                break;
             case 'id':
             case 'number':
             case 'date':
             case 'due_date':
-            case 'status':
                 $orderKey = $sortKey;
                 break;
             default:
