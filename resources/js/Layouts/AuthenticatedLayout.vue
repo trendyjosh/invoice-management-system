@@ -14,6 +14,7 @@ const navLinks = [
     { name: "Dashboard", link: "dashboard", active: "dashboard" },
     { name: "Invoices", link: "invoices.index", active: "invoices.*" },
     { name: "Customers", link: "customers.index", active: "customers.*" },
+    { name: "Companies", link: "companies.index", active: "companies.*" },
 ];
 </script>
 
