@@ -23,17 +23,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'company_name',
-        'company_number',
-        'address_1',
-        'address_2',
-        'city',
-        'county',
-        'postcode',
-        'phone',
-        'bank_name',
-        'bank_acc_no',
-        'bank_sort_code',
         'invoice_number_format',
     ];
 
@@ -74,11 +63,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Format output of sort code to 'xx-xx-xx'.
+     * Get the companies for the user.
      */
-    public function getSortCode(): string
+    public function companies(): HasMany
     {
-        return wordwrap($this->bank_sort_code,  2, '-', true);
+        return $this->hasMany(Company::class);
     }
 
     /**

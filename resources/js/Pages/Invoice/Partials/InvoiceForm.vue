@@ -8,20 +8,24 @@ import InvoiceItemComponent from "@/Components/InvoiceItemComponent.vue";
 import { useForm, InertiaForm } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import Checkbox from "@/Components/Checkbox.vue";
+import CompaniesSelect from "@/Components/CompaniesSelect.vue";
 
 const props = defineProps({
+    companies: Object,
     customers: Object,
     selected: Object,
     invoice: Object,
 });
 
 const form: InertiaForm<{
+    company: number;
     customer: number;
     date: string;
     paid: boolean;
     invoiceItems: Array<InvoiceItem>;
 }> = useForm({
-    customer: props.selected?.id,
+    company: props.selected?.id,
+    customer: 0,
     date: props.invoice?.date,
     paid: Boolean(props.invoice?.paid),
     invoiceItems: props.invoice?.invoice_items || Array<InvoiceItem>(),
@@ -61,7 +65,7 @@ function submit() {
         form.patch(
             route("invoices.update", {
                 invoice: props.invoice!.id,
-            })
+            }),
         );
     } else {
         form.post(route("invoices.store"));
@@ -81,9 +85,23 @@ function submit() {
                     </h2>
 
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Select your customer and invoice dates.
+                        Select your company, customer and invoice dates.
                     </p>
                 </header>
+
+                <div class="mt-6">
+                    <InputLabel value="Company" />
+
+                    <p v-if="invoice && invoice.company">
+                        {{ invoice.company.name }}
+                    </p>
+                    <CompaniesSelect
+                        v-else
+                        :companies="companies"
+                        v-model="form.company"
+                    />
+                    <InputError class="mt-2" :message="form.errors.company" />
+                </div>
 
                 <div class="mt-6">
                     <InputLabel value="Customer" />
@@ -160,12 +178,12 @@ function submit() {
                                 .reduce(
                                     (
                                         accumulator: number,
-                                        currentValue: InvoiceItem
+                                        currentValue: InvoiceItem,
                                     ) =>
                                         accumulator +
                                         currentValue.quantity *
                                             currentValue.unit_price,
-                                    0
+                                    0,
                                 )
                                 .toFixed(2)
                         }}

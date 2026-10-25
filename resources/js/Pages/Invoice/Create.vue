@@ -4,6 +4,7 @@ import { Head } from "@inertiajs/vue3";
 import InvoiceForm from "./Partials/InvoiceForm.vue";
 
 defineProps({
+    companies: Object,
     customers: Object,
     selected: Object,
 });
@@ -23,7 +24,11 @@ defineProps({
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-                <InvoiceForm :customers="customers" :selected="selected" />
+                <InvoiceForm
+                    :companies="companies"
+                    :customers="customers"
+                    :selected="selected"
+                />
             </div>
         </div>
     </AuthenticatedLayout>

@@ -50,10 +50,12 @@ class InvoiceController extends Controller
         }
 
         // Get logged in user and eager load their customers
-        $user = User::with('customers')->find(auth()->user()->id);
-        // Get all active customers
+        $user = User::with(['customers', 'companies'])->find(auth()->user()->id);
+        // Get all active relationships
         $customers = $user->customers()->where('status', 1)->get();
+        $companies = $user->companies()->where('status', 1)->get();
         return Inertia::render('Invoice/Create', [
+            'companies' => $companies,
             'customers' => $customers,
             'selected' => $user->customers()->find($request->customer) // optionally selected customer
         ]);
@@ -119,12 +121,14 @@ class InvoiceController extends Controller
         }
 
         // Eager load relationships
-        $invoice->load(['invoiceItems', 'customer']);
+        $invoice->load(['invoiceItems', 'customer', 'company']);
         // Get logged in user and eager load their customers
-        $user = User::with('customers')->find(auth()->user()->id);
-        // Get all active customers
+        $user = User::with(['customers', 'companies'])->find(auth()->user()->id);
+        // Get all active relationships
         $customers = $user->customers()->where('status', 1)->get();
+        $companies = $user->companies()->where('status', 1)->get();
         return Inertia::render('Invoice/Edit', [
+            'companies' => $companies,
             'customers' => $customers,
             'invoice' => $invoice,
         ]);

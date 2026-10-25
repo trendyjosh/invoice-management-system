@@ -76,7 +76,7 @@
         </tr>
         <tr>
             <td width="50%">
-                <h2>{{ Str::upper($invoice->user->company_name) }}</h2>
+                <h2>{{ Str::upper($invoice->company->name) }}</h2>
             </td>
             <td width="50%">
                 <h3>Invoice to</h3>
@@ -84,11 +84,11 @@
         </tr>
         <tr>
             <td width="50%">
-                {{ $invoice->user->address_1 }}<br>
-                @if($invoice->user->address_2){{ $invoice->user->address_2 }}<br>@endif
-                {{ $invoice->user->city }}
-                @if($invoice->user->county)<br>{{ $invoice->user->county }}@endif
-                {{ $invoice->user->postcode }}<br>
+                {{ $invoice->company->address_1 }}<br>
+                @if($invoice->company->address_2){{ $invoice->company->address_2 }}<br>@endif
+                {{ $invoice->company->city }}
+                @if($invoice->company->county)<br>{{ $invoice->company->county }}@endif
+                {{ $invoice->company->postcode }}<br>
             </td>
             <td>
                 {{ $invoice->customer->name }}<br>
@@ -101,9 +101,9 @@
         </tr>
         <tr>
             <td>
-                @if($invoice->user->company_number)COMPANY NUMBER: {{ $invoice->user->company_number }}<br>@endif
-                PHONE: {{ $invoice->user->phone }}<br>
-                EMAIL: {{ $invoice->user->email }}<br>
+                @if($invoice->company->company_number)COMPANY NUMBER: {{ $invoice->company->company_number }}<br>@endif
+                PHONE: {{ $invoice->company->phone }}<br>
+                EMAIL: {{ $invoice->company->email }}<br>
             </td>
             <td></td>
         </tr>
@@ -167,9 +167,9 @@
                             Sort code:<br>
                         </td>
                         <td width="25%">
-                            {{ $invoice->user->bank_name }}<br>
-                            {{ $invoice->user->bank_acc_no }}<br>
-                            {{ $invoice->user->getSortCode() }}<br>
+                            {{ $invoice->company->bank_name }}<br>
+                            {{ $invoice->company->bank_acc_no }}<br>
+                            {{ $invoice->company->getSortCode() }}<br>
                         </td>
                         <td width="25%">
                             DUE DATE<br>

@@ -14,6 +14,7 @@ class InvoiceStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'company' => ['required', 'exists:App\Models\Company,id'],
             'customer' => ['required', 'exists:App\Models\Customer,id'],
             'date' => ['required', 'date'],
             'invoiceItems' => ['required', 'array'],

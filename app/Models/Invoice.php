@@ -23,6 +23,7 @@ class Invoice extends Model
         'invoice_number',
         'user_id',
         'customer_id',
+        'company_id',
         'date',
         'due_date',
         'paid',
@@ -81,6 +82,14 @@ class Invoice extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Get the company that owns the invoice.
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     /**
