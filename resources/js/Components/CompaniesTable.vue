@@ -33,7 +33,7 @@ defineProps<{
                                 })
                             "
                         >
-                            {{ company.customer_number }}
+                            {{ company.company_number }}
                         </Link>
                     </td>
                     <td>
