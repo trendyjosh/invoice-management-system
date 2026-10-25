@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
@@ -53,6 +54,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/export', 'export')->name('customers.export');
         });
     Route::resource('customers', CustomerController::class);
+    // Company routes
+    Route::controller(CompanyController::class)
+        ->prefix('companies')
+        ->group(function () {
+            Route::get('/{company}/archive', 'archive')->name('companies.archive');
+            Route::get('/export', 'export')->name('companies.export');
+        });
+    Route::resource('companies', CompanyController::class);
 });
 
 require __DIR__ . '/auth.php';
