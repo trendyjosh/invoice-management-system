@@ -24,10 +24,22 @@ const props = defineProps({
                 <p>{{ company.name }}</p>
             </div>
 
+            <div v-if="company?.company_number" class="mt-6">
+                <InputLabel value="Company No." />
+
+                <p>{{ company.company_number }}</p>
+            </div>
+
             <div v-if="company?.email" class="mt-6">
                 <InputLabel value="Email" />
 
                 <p>{{ company.email }}</p>
+            </div>
+
+            <div v-if="company?.phone" class="mt-6">
+                <InputLabel value="Phone" />
+
+                <p>{{ company.phone }}</p>
             </div>
 
             <header>
@@ -68,10 +80,30 @@ const props = defineProps({
                 <p>{{ company.postcode }}</p>
             </div>
 
-            <div v-if="company?.payment_terms" class="mt-6">
-                <InputLabel value="Payment Terms" />
+            <header>
+                <h2
+                    class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                >
+                    Payment
+                </h2>
+            </header>
 
-                <p>{{ company.payment_terms }}</p>
+            <div v-if="company?.bank_name" class="mt-6">
+                <InputLabel value="Account Name" />
+
+                <p>{{ company.bank_name }}</p>
+            </div>
+
+            <div v-if="company?.bank_acc_no" class="mt-6">
+                <InputLabel value="Account Number" />
+
+                <p>{{ company.bank_acc_no }}</p>
+            </div>
+
+            <div v-if="company?.bank_sort_code" class="mt-6">
+                <InputLabel value="Sort Code" />
+
+                <p>{{ company.bank_sort_code }}</p>
             </div>
 
             <div class="flex items-center gap-4">

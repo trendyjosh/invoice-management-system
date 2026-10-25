@@ -19,9 +19,10 @@ const storeForm = useForm({
     county: props.company?.county || "",
     postcode: props.company?.postcode || "",
     phone: props.company?.phone || "",
+    email: props.company?.email || "",
     bank_name: props.company?.bank_name || "",
-    bank_acc_no: props.company?.bank_acc_no || "",
-    bank_sort_code: props.company?.bank_sort_code || "",
+    bank_acc_no: String(props.company?.bank_acc_no) || "",
+    bank_sort_code: String(props.company?.bank_sort_code) || "",
 });
 
 function store() {
@@ -89,6 +90,24 @@ function archive() {
                     <InputError
                         class="mt-2"
                         :message="storeForm.errors.company_number"
+                    />
+                </div>
+
+                <div>
+                    <InputLabel for="email" value="Email" />
+
+                    <TextInput
+                        id="email"
+                        type="text"
+                        class="mt-1 block w-full"
+                        v-model="storeForm.email"
+                        required
+                        autocomplete="email"
+                    />
+
+                    <InputError
+                        class="mt-2"
+                        :message="storeForm.errors.email"
                     />
                 </div>
 
@@ -207,7 +226,7 @@ function archive() {
                     <h2
                         class="text-lg font-medium text-gray-900 dark:text-gray-100"
                     >
-                        Payment details
+                        Payment
                     </h2>
                 </header>
 

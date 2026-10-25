@@ -22,6 +22,7 @@ class CompanyRequest extends FormRequest
             'county' => ['nullable', 'string', 'max:255'],
             'postcode' => ['string', 'max:255'],
             'phone' => ['string', 'max:255'],
+            'email' => ['email', 'max:255'],
             'bank_name' => ['string', 'max:255'],
             'bank_acc_no' => ['string', 'max:8'],
             'bank_sort_code' => ['string', 'max:6'],
